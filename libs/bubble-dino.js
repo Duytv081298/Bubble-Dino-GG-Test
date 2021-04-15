@@ -261,9 +261,6 @@ function removeEvent() {
 }
 function setStage() {
     canvas = document.getElementById("myCanvas")
-    // context = canvas.getContext("2d");
-    // // context.doStuffWithCanvasAPIs();
-    // context.webkitImageSmoothingEnabled = context.mozImageSmoothingEnabled = true;
     stage = new createjs.Stage(canvas);
     stage.mouseMoveOutside = true;
     canvas.height = height
@@ -508,18 +505,18 @@ function renderBubble() {
     var rect = new createjs.Shape();
     rect.graphics.ss(stage.canvas.width / 100)
         .s("#3e2ebb").f('#ffffff')
-        .rc(0, 0, (stage.canvas.width / 5.6), stage.canvas.width / 16, 0, stage.canvas.width / 35, stage.canvas.width / 35, 0);
-    rect.y = - stage.canvas.width / 32
+        .rc(0, 0, (stage.canvas.width / 5.6), stage.canvas.height / 26, 0, stage.canvas.width / 35, stage.canvas.width / 35, 0);
+    rect.y = - stage.canvas.height /52
 
     text_scores = new createjs.Text(game.scores + " / " + game.total_score, "bold 22px Impact", "#722b1b");
     text_scores.x = stage.canvas.width / 19
-    text_scores.y = stage.canvas.width / 60
+    text_scores.y = text_scores.getBounds().height/2
     text_scores.scale = stage.canvas.width / 555
     t1.textAlign = 'center'
     text_scores.textBaseline = "alphabetic";
 
     containerPoint.x = stage.canvas.width / 23;
-    containerPoint.y = stage.canvas.width / 22;
+    containerPoint.y = stage.canvas.height *0.025;
 
     avatar = new createjs.Sprite(spriteSheet, 'avatar')
     avatar.scaleX = (stage.canvas.width / 14) / avatar.getBounds().width
@@ -1458,14 +1455,11 @@ function limitAngle(mouseangle) {
 function tick(event) {
     if (update) {
         updateParticles();
-
         stage.update(event);
         if (outer1 && outer2) {
             outer1.rotation++;
             outer2.rotation--;
         }
-
-        // removeBubbleAlone()
     }
 }
 var handMove = setInterval(function () {
