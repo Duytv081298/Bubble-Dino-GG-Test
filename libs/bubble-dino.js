@@ -233,6 +233,7 @@ function setAnimation() {
     })
     setBackground()
     setDinosaursAndBird()
+    // setStar()
     renderBubble()
     setPlayer()
 }
@@ -1214,7 +1215,34 @@ function checkComplete() {
 async function setStar() {
     var complete = await checkComplete()
     // var complete = true
-    if (complete == true && win == true || game.scores == game.total_score && win == true) {
+    // win = true
+    // game.total_score = game.scores
+    if (complete == true && win == true && game.scores == game.total_score || game.scores == game.total_score && win == true) {
+        setInterval(emitParticles, (Math.random() * 700) + 300);
+        setInterval(emitParticles, (Math.random() * 700) + 300);
+        var newBubble = []
+        for (let i = 0; i < 16; i++) {
+            var idBubble = Math.floor(Math.random() * 5);
+            var bubble = new createjs.Sprite(spriteSheet, convertIdtoBubble(idBubble))
+            bubble.scaleX = bubble.scaleY = Math.random() + 0.5
+            bubble.x = Math.random() * stage.canvas.width * 6 / 8 + stage.canvas.width / 10
+            bubble.y = Math.random() * stage.canvas.height / 3 + stage.canvas.height
+            bubble.alpha = Math.floor(Math.random() * 2) == 1 ? 1 : Math.random()
+
+            stage.addChild(bubble)
+            createjs.Tween.get(bubble)
+                .to({ y: stage.canvas.height * 0.5 / 2, alpha: 0.5 }, (bubble.y - (stage.canvas.height * 0.7 / 2)), createjs.Ease.linear)
+                .call(() => {
+                    newBubble.forEach(bubble => {
+                        stage.removeChild(bubble)
+                    });
+
+                })
+            newBubble.push(bubble)
+        }
+        console.log(idBubble);
+
+
         clearInterval(handMove);
         removeEvent()
         win = false
@@ -1250,6 +1278,11 @@ async function setStar() {
         stage.addChild(star, btn_continue);
         createjs.Tween.get(star)
             .to({ y: stage.canvas.height * 1.75 / 3 - (star.scaleY * star.getBounds().height) * 1.2 }, 500, createjs.Ease.linear)
+        // .call(()=>{
+        //     newBubble.forEach(bubble => {
+        //         stage.removeChild(bubble)
+        //     });
+        // })
         createjs.Tween.get(btn_continue)
             .to({ y: stage.canvas.height / 1.7 }, 500, createjs.Ease.linear)
             .call(() => {
@@ -1261,50 +1294,50 @@ async function setStar() {
 
         btn_continue.addEventListener("click", () => { window.open("https://play.google.com/store/apps/details?id=bubble.shooter.primitive.dinosaurs.egg.shot") }, false);
 
-        setTimeout(function () {
-            var star0 = new createjs.Sprite(spriteSheet, 'star')
-            var scaleStar = (stage.canvas.width / 10) / star0.getBounds().width
-            var x1 = stage.canvas.width / 2 - (star0.getBounds().width * scaleStar) / 2
+        // setTimeout(function () {
+        //     var star0 = new createjs.Sprite(spriteSheet, 'star')
+        //     var scaleStar = (stage.canvas.width / 10) / star0.getBounds().width
+        //     var x1 = stage.canvas.width / 2 - (star0.getBounds().width * scaleStar) / 2
 
 
-            star0.scaleX = (stage.canvas.width / 2) / star0.getBounds().width;
-            star0.scaleY = (stage.canvas.width / 2) / star0.getBounds().width;
-            star0.x = stage.canvas.width / 2 - (star0.getBounds().width * star0.scaleX) / 2
-            star0.y = (stage.canvas.height / 5.5)
-            var star1 = star0.clone()
-            var star2 = star0.clone()
-            createjs.Tween.get(star0)
-                .to({
-                    rotation: -15,
-                    scaleX: scaleStar,
-                    scaleY: scaleStar,
-                    x: x1 - (star0.getBounds().width * scaleStar) * 1.3,
-                    y: (stage.canvas.height / 9.5)
-                }, 500, createjs.Ease.linear)
-                .call(() => {
+        //     star0.scaleX = (stage.canvas.width / 2) / star0.getBounds().width;
+        //     star0.scaleY = (stage.canvas.width / 2) / star0.getBounds().width;
+        //     star0.x = stage.canvas.width / 2 - (star0.getBounds().width * star0.scaleX) / 2
+        //     star0.y = (stage.canvas.height / 5.5)
+        //     var star1 = star0.clone()
+        //     var star2 = star0.clone()
+        //     createjs.Tween.get(star0)
+        //         .to({
+        //             rotation: -15,
+        //             scaleX: scaleStar,
+        //             scaleY: scaleStar,
+        //             x: x1 - (star0.getBounds().width * scaleStar) * 1.3,
+        //             y: (stage.canvas.height / 9.5)
+        //         }, 500, createjs.Ease.linear)
+        //         .call(() => {
 
-                    stage.addChild(star1);
-                    createjs.Tween.get(star1)
-                        .to({
-                            scaleX: scaleStar,
-                            scaleY: scaleStar,
-                            x: x1,
-                            y: (stage.canvas.height / 14)
-                        }, 500, createjs.Ease.linear)
-                        .call(() => {
-                            stage.addChild(star2);
-                            createjs.Tween.get(star2)
-                                .to({
-                                    rotation: 15,
-                                    scaleX: scaleStar,
-                                    scaleY: scaleStar,
-                                    x: x1 + (star0.getBounds().width * scaleStar) * 1.3,
-                                    y: (stage.canvas.height / 11.3)
-                                }, 500, createjs.Ease.linear)
-                        })
-                })
-            stage.addChild(star0);
-        }, 600);
+        //             stage.addChild(star1);
+        //             createjs.Tween.get(star1)
+        //                 .to({
+        //                     scaleX: scaleStar,
+        //                     scaleY: scaleStar,
+        //                     x: x1,
+        //                     y: (stage.canvas.height / 14)
+        //                 }, 500, createjs.Ease.linear)
+        //                 .call(() => {
+        //                     stage.addChild(star2);
+        //                     createjs.Tween.get(star2)
+        //                         .to({
+        //                             rotation: 15,
+        //                             scaleX: scaleStar,
+        //                             scaleY: scaleStar,
+        //                             x: x1 + (star0.getBounds().width * scaleStar) * 1.3,
+        //                             y: (stage.canvas.height / 11.3)
+        //                         }, 500, createjs.Ease.linear)
+        //                 })
+        //         })
+        //     stage.addChild(star0);
+        // }, 600);
     } else if (complete == true && win == false) removeEvent()
     else addEvent()
 }
@@ -1458,6 +1491,8 @@ function limitAngle(mouseangle) {
 }
 function tick(event) {
     if (update) {
+        updateParticles();
+
         stage.update(event);
         if (outer1 && outer2) {
             outer1.rotation++;
@@ -1474,3 +1509,53 @@ var handMove = setInterval(function () {
     }
     downtime += 1
 }, 1000);
+
+
+
+var particles = [];
+const MAX_LIFE = 100;
+var count = 0;
+
+
+function emitParticles() {
+    var fire_x = Math.floor(Math.random() * stage.canvas.width);
+    var circle_r = Math.round(Math.random() * 3 + 3);
+    var a = Math.floor(Math.random() * 2);
+    var fire_y = a == 0 ? Math.floor(Math.random() * stage.canvas.height / 5) - stage.canvas.height / 30 : Math.floor(Math.random() * stage.canvas.height / 10) + stage.canvas.height * 2 / 5
+    for (var i = 0; i < 180; i += 5) {
+        var particle = new createjs.Shape();
+        particle.graphics
+            .beginFill(createjs.Graphics.getHSL(count, 75, 75))
+            .drawPolyStar(100, 100, circle_r, 5, 0.6, -90)
+        particle.x = fire_x;
+        particle.y = fire_y;
+        particle.compositeOperation = "lighter";
+        stage.addChild(particle);
+        var angle = i + 1;
+        var pow = Math.random() * 10 + 3;
+        particle.vx = pow * Math.cos((angle * 5) * Math.PI / 180);
+        particle.vy = pow * Math.sin((angle * 5) * Math.PI / 180);
+        particle.life = MAX_LIFE;
+        particles.push(particle);
+    }
+}
+function updateParticles() {
+    for (var i = 0; i < particles.length; i++) {
+        var particle = particles[i];
+        particle.vy += 0.3;
+        particle.vx *= 0.9;
+        particle.vy *= 0.9;
+        particle.x += particle.vx;
+        particle.y += particle.vy;
+        var scale = particle.life / MAX_LIFE;
+        particle.scaleX = particle.scaleY = scale;
+        particle.life -= 1;
+        // var a = particle.clone()
+        // stage.addChild(a);
+        // particles.push(a);
+        if (particle.life <= 0) {
+            stage.removeChild(particle);
+            particles.splice(i, 1);
+        }
+    }
+}
