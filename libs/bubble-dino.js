@@ -1232,7 +1232,8 @@ async function setStar() {
     // win = true
     // game.total_score = game.scores
     if (complete == true && win == true && game.scores == game.total_score || game.scores == game.total_score && win == true) {
-
+        win = false 
+        removeEvent()
         stage.removeChild(install_now)
         setInterval(emitParticles, (Math.random() * 700) + 300);
         setInterval(emitParticles, (Math.random() * 700) + 300);
@@ -1257,8 +1258,6 @@ async function setStar() {
                 if (iBubble == 40) clearInterval(renBubble);
             }, 50);
         clearInterval(handMove);
-        removeEvent()
-        win = false
         game.map[0].forEach(top => {
             containerMain.removeChild(top.bubble)
         });
@@ -1293,9 +1292,8 @@ async function setStar() {
                     .to({ scaleX: scale + 0.2, scaleY: scale + 0.2, x: x - stage.canvas.width / 40 }, 500, createjs.Ease.linear)
                     .to({ scaleX: scale, scaleY: scale, x: x }, 500, createjs.Ease.linear)
             })
-
         btn_continue.addEventListener("click", () => { window.open("https://play.google.com/store/apps/details?id=bubble.shooter.primitive.dinosaurs.egg.shot") }, false);
-    } else if (complete == true && win == false) removeEvent()
+    } else if (complete == true && win == false || game.scores == game.total_score && win == false) removeEvent()
     else addEvent()
 }
 function renderXY(direction, x, y) {
