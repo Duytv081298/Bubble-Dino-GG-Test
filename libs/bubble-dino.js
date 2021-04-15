@@ -1232,7 +1232,7 @@ async function setStar() {
     // win = true
     // game.total_score = game.scores
     if (complete == true && win == true && game.scores == game.total_score || game.scores == game.total_score && win == true) {
-        win = false 
+        win = false
         removeEvent()
         stage.removeChild(install_now)
         setInterval(emitParticles, (Math.random() * 700) + 300);
@@ -1293,7 +1293,18 @@ async function setStar() {
                     .to({ scaleX: scale, scaleY: scale, x: x }, 500, createjs.Ease.linear)
             })
         btn_continue.addEventListener("click", () => { window.open("https://play.google.com/store/apps/details?id=bubble.shooter.primitive.dinosaurs.egg.shot") }, false);
-    } else if (complete == true && win == false || game.scores == game.total_score && win == false) removeEvent()
+    } else if (complete == true && win == false || game.scores == game.total_score && win == false) {
+        game.map.forEach(row => {
+            row.forEach(bubbles => {
+                if (bubbles.existing == true && bubbles.color < 20) {
+                    containerMain.removeChild(bubbles.bubble)
+                    bubbleDie(bubbles.color, bubbles.x, bubbles.y)
+                }
+            });
+        })
+        stage.removeChild(containerLine)
+        removeEvent()
+    }
     else addEvent()
 }
 function renderXY(direction, x, y) {
