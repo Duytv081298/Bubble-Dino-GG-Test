@@ -58,14 +58,14 @@
 
         async function gameinit() {
 
-            var orientation = mraid.getOrientationProperties();
-            console.log(orientation.allowOrientationChange);
-            console.log(orientation.forceOrientation);
             var success = false;
             if (document.readyState === 'complete') {
 
                 if (typeof mraid !== 'undefined') {
                     var resolve = await fixOrientation()
+                    var orientation = mraid.getOrientationProperties();
+                    console.log(orientation.allowOrientationChange);
+                    console.log(orientation.forceOrientation);
                     console.log('resolve');
                     console.log(resolve);
                     if (mraid.getState() === 'loading') {
@@ -79,20 +79,18 @@
             return success;
         };
         async function fixOrientation() {
-
             console.log('change');
             var orientation = mraid.getOrientationProperties();
             console.log(orientation.allowOrientationChange);
             console.log(orientation.forceOrientation);
-            if (orientation.forceOrientation != 'portrait') {
-                console.log('aaaaaaaaaa');
-                new Promise(resolve => {
-                    mraid.setOrientationProperties({
-                        "allowOrientationChange": false,
-                        "forceOrientation": 'portrait'
-                    });
-                }).then(() => { return true })
-            } else { return false };
+            console.log('aaaaaaaaaa');
+            new Promise(resolve => {
+                mraid.setOrientationProperties({
+                    "allowOrientationChange": false,
+                    "forceOrientation": 'portrait'
+                });
+                resolve(true)
+            })
         }
         async function displayAd() {
             createjs.RotationPlugin.install();
@@ -335,8 +333,8 @@
             canvas.height = height;
             canvas.width = width;
             addEvent();
-            console.log('width: '+ width + ' : ' + stage.canvas.width);
-            console.log('height: '+ height + ' : ' + stage.canvas.height);
+            console.log('width: ' + width + ' : ' + stage.canvas.width);
+            console.log('height: ' + height + ' : ' + stage.canvas.height);
             game.bubble.currentWidth = Math.round((stage.canvas.width / 11) * 100) / 100;
             game.bubble.currentHeight = Math.round((stage.canvas.width / 11) * 100) / 100;
             game.bubble.scale = Math.round((stage.canvas.width / 11) / 50 * 100) / 100;
