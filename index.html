@@ -18,9 +18,6 @@
             || document.documentElement.clientHeight
             || document.body.clientHeight;
         width = isMobile ? width : height / 1.7;
-
-        console.log('width: ' + width);
-        console.log('height: ' + height);
         var canvas, stage, context, update = true;
         var supportsPassive = false, pressMove = false;
         var containerLine = new createjs.Container();
@@ -65,15 +62,20 @@
             if (document.readyState === 'complete') {
                 if (typeof mraid !== 'undefined') {
                     var resolve = await fixOrientation()
+var t = 0
+                    setInterval(function () {
+                        width = window.innerWidth
+                            || document.documentElement.clientWidth
+                            || document.body.clientWidth;
 
-                    width = window.innerWidth
-                        || document.documentElement.clientWidth
-                        || document.body.clientWidth;
-
-                    height = window.innerHeight
-                        || document.documentElement.clientHeight
-                        || document.body.clientHeight;
-                    width = isMobile ? width : height / 1.7;
+                        height = window.innerHeight
+                            || document.documentElement.clientHeight
+                            || document.body.clientHeight;
+                        width = isMobile ? width : height / 1.7;
+                        console.log('lan: ', t);
+                        console.log('width: ' + width);
+                        console.log('height: ' + height);
+                    }, 3000);
                     var orientation = mraid.getOrientationProperties();
                     console.log(orientation.allowOrientationChange);
                     console.log(orientation.forceOrientation);
