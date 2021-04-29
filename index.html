@@ -63,21 +63,13 @@
                 if (typeof mraid !== 'undefined') {
                     var resolve = await fixOrientation()
                     var screenSize = mraid.getScreenSize();
-                    var screenLandscapeWidth = screenSize.width;
-                    var screenLandscapeHeight = screenSize.height;
-
-                    console.log('width: ' + screenLandscapeWidth);
-                    console.log('height: ' + screenLandscapeHeight);
+                    width = screenSize.width;
+                    height = screenSize.height;
 
                     if ((window.orientation == 0) || (window.orientation == 180)) {
                         // If device is in portrait swap dimensions
-                        screenLandscapeWidth = screenSize.height;
-                        screenLandscapeHeight = screenSize.width;
-
-                        console.log('trong if');
-                        
-                    console.log('width: ' + screenLandscapeWidth);
-                    console.log('height: ' + screenLandscapeHeight);
+                        width = screenSize.height;
+                        height = screenSize.width;
                     }
                     // var t = 0
                     //                     setInterval(function () {
