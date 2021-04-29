@@ -62,21 +62,38 @@
             if (document.readyState === 'complete') {
                 if (typeof mraid !== 'undefined') {
                     var resolve = await fixOrientation()
-var t = 0
-                    setInterval(function () {
-                        width = window.innerWidth
-                            || document.documentElement.clientWidth
-                            || document.body.clientWidth;
+                    var screenSize = mraid.getScreenSize();
+                    var screenLandscapeWidth = screenSize.width;
+                    var screenLandscapeHeight = screenSize.height;
 
-                        height = window.innerHeight
-                            || document.documentElement.clientHeight
-                            || document.body.clientHeight;
-                        width = isMobile ? width : height / 1.7;
-                        console.log('lan: ', t);
-                        console.log('width: ' + width);
-                        console.log('height: ' + height);
-                        t++
-                    }, 1000);
+                    console.log('width: ' + screenLandscapeWidth);
+                    console.log('height: ' + screenLandscapeHeight);
+
+                    if ((window.orientation == 0) || (window.orientation == 180)) {
+                        // If device is in portrait swap dimensions
+                        screenLandscapeWidth = screenSize.height;
+                        screenLandscapeHeight = screenSize.width;
+
+                        console.log('trong if');
+                        
+                    console.log('width: ' + screenLandscapeWidth);
+                    console.log('height: ' + screenLandscapeHeight);
+                    }
+                    // var t = 0
+                    //                     setInterval(function () {
+                    //                         width = window.innerWidth
+                    //                             || document.documentElement.clientWidth
+                    //                             || document.body.clientWidth;
+
+                    //                         height = window.innerHeight
+                    //                             || document.documentElement.clientHeight
+                    //                             || document.body.clientHeight;
+                    //                         width = isMobile ? width : height / 1.7;
+                    //                         console.log('lan: ', t);
+                    //                         console.log('width: ' + width);
+                    //                         console.log('height: ' + height);
+                    //                         t++
+                    //                     }, 1000);
                     var orientation = mraid.getOrientationProperties();
                     console.log(orientation.allowOrientationChange);
                     console.log(orientation.forceOrientation);
