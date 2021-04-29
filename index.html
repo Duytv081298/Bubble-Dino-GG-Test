@@ -57,26 +57,30 @@
         var win = true;
 
         async function gameinit() {
-            console.log('change');
-            var orientation = mraid.getOrientationProperties();
-            console.log(orientation.allowOrientationChange);
-            console.log(orientation.forceOrientation);
-            if (orientation.forceOrientation != 'portrait') {
-                await mraid.setOrientationProperties({
-                    "allowOrientationChange": false,
-                    "forceOrientation": 'portrait'
-                });
-                console.log('aaaaaaaaaa');
-            }else console.log('bbbbbbbbbbbb');
             var success = false;
             if (document.readyState === 'complete') {
                 if (typeof mraid !== 'undefined') {
-                    if (mraid.getState() === 'loading') {
-                        mraid.addEventListener('ready', displayAd);
-                    } else if (mraid.getState() === 'default') {
-                        displayAd();
-                    };
-                    success = true;
+                    console.log('change');
+                    var orientation = mraid.getOrientationProperties();
+                    console.log(orientation.allowOrientationChange);
+                    console.log(orientation.forceOrientation);
+                    if (orientation.forceOrientation != 'portrait') {
+                        new Promise((resolve, reject) => {
+                            mraid.setOrientationProperties({
+                                "allowOrientationChange": false,
+                                "forceOrientation": 'portrait'
+                            })
+                        }).then(
+                            () => {
+                                if (mraid.getState() === 'loading') {
+                                    mraid.addEventListener('ready', displayAd);
+                                } else if (mraid.getState() === 'default') {
+                                    displayAd();
+                                };
+                                success = true;
+                            }
+                        )
+                    } else console.log('bbbbbbbbbbbb');
                 };
             };
             return success;
