@@ -62,6 +62,15 @@
             if (document.readyState === 'complete') {
                 if (typeof mraid !== 'undefined') {
                     var resolve = await fixOrientation()
+
+                    width = window.innerWidth
+                        || document.documentElement.clientWidth
+                        || document.body.clientWidth;
+
+                    height = window.innerHeight
+                        || document.documentElement.clientHeight
+                        || document.body.clientHeight;
+                    width = isMobile ? width : height / 1.7;
                     var orientation = mraid.getOrientationProperties();
                     console.log(orientation.allowOrientationChange);
                     console.log(orientation.forceOrientation);
@@ -87,14 +96,6 @@
                     "allowOrientationChange": false,
                     "forceOrientation": 'portrait'
                 });
-                width = window.innerWidth
-                    || document.documentElement.clientWidth
-                    || document.body.clientWidth;
-
-                height = window.innerHeight
-                    || document.documentElement.clientHeight
-                    || document.body.clientHeight;
-                width = isMobile ? width : height / 1.7;
                 resolve(11111111);
 
             });
