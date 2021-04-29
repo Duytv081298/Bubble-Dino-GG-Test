@@ -58,7 +58,9 @@
 
         function gameinit() {
             console.log('change');
-            console.log(mraid.getOrientationProperties());
+            var orientation = mraid.getOrientationProperties()
+            console.log(orientation.allowOrientationChange);
+            console.log(orientation.forceOrientation);
             var success = false;
             if (document.readyState === 'complete') {
                 if (typeof mraid !== 'undefined') {
