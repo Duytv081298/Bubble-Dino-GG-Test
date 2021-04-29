@@ -56,14 +56,18 @@
         var spriteSheet;
         var win = true;
 
-        function gameinit() {
-            fixOrientation()
+        async function gameinit() {
+
             var orientation = mraid.getOrientationProperties();
             console.log(orientation.allowOrientationChange);
             console.log(orientation.forceOrientation);
             var success = false;
             if (document.readyState === 'complete') {
+
                 if (typeof mraid !== 'undefined') {
+                    var resolve = await fixOrientation()
+                    console.log('resolve');
+                    console.log(resolve);
                     if (mraid.getState() === 'loading') {
                         mraid.addEventListener('ready', displayAd);
                     } else if (mraid.getState() === 'default') {
@@ -75,17 +79,20 @@
             return success;
         };
         async function fixOrientation() {
+
             console.log('change');
             var orientation = mraid.getOrientationProperties();
             console.log(orientation.allowOrientationChange);
             console.log(orientation.forceOrientation);
             if (orientation.forceOrientation != 'portrait') {
-                mraid.setOrientationProperties({
-                    "allowOrientationChange": false,
-                    "forceOrientation": 'portrait'
-                });
                 console.log('aaaaaaaaaa');
-            } else console.log('bbbbbbbbbbbb');
+                new Promise(resolve => {
+                    mraid.setOrientationProperties({
+                        "allowOrientationChange": false,
+                        "forceOrientation": 'portrait'
+                    });
+                }).then(() => { return true })
+            } else { return false };
         }
         async function displayAd() {
             createjs.RotationPlugin.install();
