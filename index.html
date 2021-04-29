@@ -74,6 +74,10 @@
                         width = screenSize.height;
                         height = screenSize.width;
                     }
+                    
+                    console.log(' 78 width: ' + width);
+                    console.log(' 79 height: ' + height);
+                    console.log('window.orientation : ' , window.orientation);
                     // var t = 0
                     //                     setInterval(function () {
                     //                         width = window.innerWidth
@@ -89,11 +93,11 @@
                     //                         console.log('height: ' + height);
                     //                         t++
                     //                     }, 1000);
-                    var orientation = mraid.getOrientationProperties();
-                    console.log(orientation.allowOrientationChange);
-                    console.log(orientation.forceOrientation);
-                    console.log('resolve');
-                    console.log(resolve);
+                    // var orientation = mraid.getOrientationProperties();
+                    // console.log(orientation.allowOrientationChange);
+                    // console.log(orientation.forceOrientation);
+                    // console.log('resolve');
+                    // console.log(resolve);
                     if (mraid.getState() === 'loading') {
                         mraid.addEventListener('ready', displayAd);
                     } else if (mraid.getState() === 'default') {
