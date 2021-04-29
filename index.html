@@ -62,10 +62,10 @@
             console.log(orientation.allowOrientationChange);
             console.log(orientation.forceOrientation);
             if (orientation.forceOrientation != 'portrait') {
-                // mraid.setOrientationProperties({
-                //     "allowOrientationChange": false,
-                //     "forceOrientation": portrait
-                // });
+                mraid.setOrientationProperties({
+                    "allowOrientationChange": false,
+                    "forceOrientation": 'portrait'
+                });
                 console.log('aaaaaaaaaa');
             }else console.log('bbbbbbbbbbbb');
             var success = false;
