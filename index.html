@@ -86,10 +86,7 @@
                 mraid.setOrientationProperties({
                     "allowOrientationChange": false,
                     "forceOrientation": 'portrait'
-                })
-                setTimeout(() => {
-                    resolve(100000000000);
-                }, 2000);
+                }).then(() => { resolve(55555555);});
 
             });
         };
