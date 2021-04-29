@@ -18,6 +18,9 @@
             || document.documentElement.clientHeight
             || document.body.clientHeight;
         width = isMobile ? width : height / 1.7;
+
+        console.log('width: ' + width);
+        console.log('height: ' + height);
         var canvas, stage, context, update = true;
         var supportsPassive = false, pressMove = false;
         var containerLine = new createjs.Container();
