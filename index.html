@@ -75,7 +75,8 @@ var t = 0
                         console.log('lan: ', t);
                         console.log('width: ' + width);
                         console.log('height: ' + height);
-                    }, 3000);
+                        t++
+                    }, 1000);
                     var orientation = mraid.getOrientationProperties();
                     console.log(orientation.allowOrientationChange);
                     console.log(orientation.forceOrientation);
