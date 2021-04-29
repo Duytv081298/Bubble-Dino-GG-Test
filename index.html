@@ -69,15 +69,15 @@
                     console.log(' 70 width: ' + width);
                     console.log(' 71 height: ' + height);
 
-                    if ((window.orientation == 0) || (window.orientation == 180)) {
+                    if ((window.orientation == 90) || (window.orientation == - 90)) {
                         // If device is in portrait swap dimensions
                         width = screenSize.height;
                         height = screenSize.width;
                     }
-                    
+
                     console.log(' 78 width: ' + width);
                     console.log(' 79 height: ' + height);
-                    console.log('window.orientation : ' , window.orientation);
+                    console.log('window.orientation : ', window.orientation);
                     // var t = 0
                     //                     setInterval(function () {
                     //                         width = window.innerWidth
