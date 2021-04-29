@@ -57,6 +57,7 @@
         var win = true;
 
         function gameinit() {
+            console.log(mraid.getOrientationProperties());
             var success = false;
             if (document.readyState === 'complete') {
                 if (typeof mraid !== 'undefined') {
