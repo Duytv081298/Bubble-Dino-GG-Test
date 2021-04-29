@@ -83,12 +83,10 @@
             console.log(orientation.allowOrientationChange);
             console.log(orientation.forceOrientation);
             new Promise(resolve => {
-                // mraid.setOrientationProperties({
-                //     "allowOrientationChange": false,
-                //     "forceOrientation": 'portrait'
-                // }).then(() => {
-                //     resolve(true);
-                // });
+                mraid.setOrientationProperties({
+                    "allowOrientationChange": false,
+                    "forceOrientation": 'portrait'
+                })
                 setTimeout(() => {
                     resolve(100000000000);
                 }, 2000);
