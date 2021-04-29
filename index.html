@@ -56,35 +56,37 @@
         var spriteSheet;
         var win = true;
 
-        async function gameinit() {
+        function gameinit() {
+            fixOrientation()
+            var orientation = mraid.getOrientationProperties();
+            console.log(orientation.allowOrientationChange);
+            console.log(orientation.forceOrientation);
             var success = false;
             if (document.readyState === 'complete') {
                 if (typeof mraid !== 'undefined') {
-                    console.log('change');
-                    var orientation = mraid.getOrientationProperties();
-                    console.log(orientation.allowOrientationChange);
-                    console.log(orientation.forceOrientation);
-                    if (orientation.forceOrientation != 'portrait') {
-                        new Promise((resolve, reject) => {
-                            mraid.setOrientationProperties({
-                                "allowOrientationChange": false,
-                                "forceOrientation": 'portrait'
-                            })
-                        }).then(
-                            () => {
-                                if (mraid.getState() === 'loading') {
-                                    mraid.addEventListener('ready', displayAd);
-                                } else if (mraid.getState() === 'default') {
-                                    displayAd();
-                                };
-                                success = true;
-                            }
-                        )
-                    } else console.log('bbbbbbbbbbbb');
+                    if (mraid.getState() === 'loading') {
+                        mraid.addEventListener('ready', displayAd);
+                    } else if (mraid.getState() === 'default') {
+                        displayAd();
+                    };
+                    success = true;
                 };
             };
             return success;
         };
+        async function fixOrientation() {
+            console.log('change');
+            var orientation = mraid.getOrientationProperties();
+            console.log(orientation.allowOrientationChange);
+            console.log(orientation.forceOrientation);
+            if (orientation.forceOrientation != 'portrait') {
+                mraid.setOrientationProperties({
+                    "allowOrientationChange": false,
+                    "forceOrientation": 'portrait'
+                });
+                console.log('aaaaaaaaaa');
+            } else console.log('bbbbbbbbbbbb');
+        }
         async function displayAd() {
             createjs.RotationPlugin.install();
             createjs.MotionGuidePlugin.install();
