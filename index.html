@@ -78,7 +78,7 @@
             };
             return success;
         };
-        async function fixOrientation() {
+        function fixOrientation() {
             console.log('change');
             var orientation = mraid.getOrientationProperties();
             console.log(orientation.allowOrientationChange);
@@ -88,10 +88,11 @@
                 mraid.setOrientationProperties({
                     "allowOrientationChange": false,
                     "forceOrientation": 'portrait'
+                }).then(() => {
+                    resolve(true);
                 });
-                resolve(true)
-            })
-        }
+            });
+        };
         async function displayAd() {
             createjs.RotationPlugin.install();
             createjs.MotionGuidePlugin.install();
