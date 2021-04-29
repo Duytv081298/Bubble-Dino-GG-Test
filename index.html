@@ -56,13 +56,13 @@
         var spriteSheet;
         var win = true;
 
-        function gameinit() {
+        async function gameinit() {
             console.log('change');
             var orientation = mraid.getOrientationProperties();
             console.log(orientation.allowOrientationChange);
             console.log(orientation.forceOrientation);
             if (orientation.forceOrientation != 'portrait') {
-                mraid.setOrientationProperties({
+                await mraid.setOrientationProperties({
                     "allowOrientationChange": false,
                     "forceOrientation": 'portrait'
                 });
