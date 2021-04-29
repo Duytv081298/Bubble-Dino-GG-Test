@@ -60,7 +60,6 @@
 
             var success = false;
             if (document.readyState === 'complete') {
-
                 if (typeof mraid !== 'undefined') {
                     var resolve = await fixOrientation()
                     var orientation = mraid.getOrientationProperties();
@@ -83,14 +82,17 @@
             var orientation = mraid.getOrientationProperties();
             console.log(orientation.allowOrientationChange);
             console.log(orientation.forceOrientation);
-            console.log('aaaaaaaaaa');
             new Promise(resolve => {
-                mraid.setOrientationProperties({
-                    "allowOrientationChange": false,
-                    "forceOrientation": 'portrait'
-                }).then(() => {
-                    resolve(true);
-                });
+                // mraid.setOrientationProperties({
+                //     "allowOrientationChange": false,
+                //     "forceOrientation": 'portrait'
+                // }).then(() => {
+                //     resolve(true);
+                // });
+                setTimeout(() => {
+                    resolve(100000000000);
+                }, 2000);
+
             });
         };
         async function displayAd() {
