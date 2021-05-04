@@ -76,12 +76,12 @@
                     console.log('height ', screenSize.height);
                     console.log('window.orientation ', window.orientation);
 
-                    if ((window.orientation != 0) || (window.orientation != 180)) {
+                    if ((window.orientation == 90) || (window.orientation == 90)) {
+                        width = screenSize.height / 1.7;
+                        height = screenSize.width * 0.9;
                         console.log('nam nang');
-                        console.log('width ', screenSize.width);
-                        console.log('height ', screenSize.height);
-                        // width = screenSize.height / 1.7;
-                        // height = screenSize.width*0.9;
+                        console.log('width ', width);
+                        console.log('height ', height);
                     };
                     if (mraid.getState() === 'loading') {
                         mraid.addEventListener('ready', displayAd);
