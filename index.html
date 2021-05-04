@@ -8,7 +8,7 @@
     <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1524180/RotationPlugin.js"></script>
     <script src="mraid.js"></script>
     <script>
-        var canvas, stage, width, height, update = true;
+        var canvas, stage, screenSize, width, height, update = true;
         var supportsPassive = false, pressMove = false;
         var containerLine = new createjs.Container();
         var indexClarity = [];
@@ -67,27 +67,12 @@
                 if (typeof mraid !== 'undefined') {
                     // mraid.setOrientationProperties({ "allowOrientationChange": false, "forceOrientation": "portrait" });
                     mraid.setOrientationProperties({ "allowOrientationChange": false });
-                    var screenSize = mraid.getScreenSize();
+                    screenSize = mraid.getScreenSize();
                     width = screenSize.width;
                     height = screenSize.height;
-
-                    console.log('nam dọc');
-                    console.log('width ', screenSize.width);
-                    console.log('height ', screenSize.height);
-                    console.log('window.orientation ', window.orientation);
-                    var position = mraid.getCurrentPosition()
-                    console.log('79> x: ', position.x);
-                    console.log('80> y: ', position.y);
-                    console.log('81> width: ', position.width);
-                    console.log('82> height: ', position.height);
-
-
-                    if ((window.orientation == 90) || (window.orientation == 90)) {
+                    if ((window.orientation == 90) || (window.orientation == -90)) {
                         height = screenSize.height;
                         width = height / 1.7;
-                        console.log('nam nang');
-                        console.log('width ', width);
-                        console.log('height ', height);
                     };
                     if (mraid.getState() === 'loading') {
                         mraid.addEventListener('ready', displayAd);
@@ -325,8 +310,8 @@
             canvas.height = height;
             canvas.width = width;
             addEvent();
-            // console.log('width: ' + width + ' : ' + stage.canvas.width);
-            // console.log('height: ' + height + ' : ' + stage.canvas.height);
+            console.log('width: ' + width + ' : ' + stage.canvas.width);
+            console.log('height: ' + height + ' : ' + stage.canvas.height);
             game.bubble.currentWidth = Math.round((stage.canvas.width / 11) * 100) / 100;
             game.bubble.currentHeight = Math.round((stage.canvas.width / 11) * 100) / 100;
             game.bubble.scale = Math.round((stage.canvas.width / 11) / 50 * 100) / 100;
@@ -1684,9 +1669,9 @@
             containerLine = new createjs.Container();
         };
         function currentMouse(evt) {
-            var x, y = evt.changedTouches[0].clientY;
-            if ((window.orientation == 90) || (window.orientation == 90)) {
-                x = evt.changedTouches[0].clientX - (mraid.getScreenSize().width / 2 - width / 2)
+            var x = evt.changedTouches[0].clientX, y = evt.changedTouches[0].clientY;
+            if ((window.orientation == 90) || (window.orientation == -90)) {
+                x = evt.changedTouches[0].clientX - (screenSize.width / 2 - width / 2)
             };
             return { x: x, y: y }
         }
