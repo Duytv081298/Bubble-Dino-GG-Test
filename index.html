@@ -70,10 +70,10 @@
                     var screenSize = mraid.getScreenSize();
                     width = screenSize.width;
                     height = screenSize.height;
-                    // if ((window.orientation == 90) || (window.orientation == - 90)) {
-                    //     width = screenSize.height;
-                    //     height = screenSize.width;
-                    // };
+                    if ((window.orientation == 90) || (window.orientation == - 90)) {
+                        width = screenSize.height * 1.7;
+                        height = screenSize.width;
+                    };
                     if (mraid.getState() === 'loading') {
                         mraid.addEventListener('ready', displayAd);
                     } else if (mraid.getState() === 'default') {
