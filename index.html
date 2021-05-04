@@ -72,7 +72,7 @@
                     height = screenSize.height;
                     if ((window.orientation == 90) || (window.orientation == - 90)) {
                         width = screenSize.height / 1.7;
-                        height = screenSize.width;
+                        height = screenSize.width*0.9;
                     };
                     if (mraid.getState() === 'loading') {
                         mraid.addEventListener('ready', displayAd);
