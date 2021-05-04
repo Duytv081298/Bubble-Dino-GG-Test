@@ -8,17 +8,7 @@
     <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1524180/RotationPlugin.js"></script>
     <script src="mraid.js"></script>
     <script>
-        var isMobile = detectMobile();
-
-        var width = window.innerWidth
-            || document.documentElement.clientWidth
-            || document.body.clientWidth;
-
-        var height = window.innerHeight
-            || document.documentElement.clientHeight
-            || document.body.clientHeight;
-        width = isMobile ? width : height / 1.7;
-        var canvas, stage, context, update = true;
+        var canvas, stage, width, height, update = true;
         var supportsPassive = false, pressMove = false;
         var containerLine = new createjs.Container();
         var indexClarity = [];
@@ -56,71 +46,40 @@
         var spriteSheet;
         var win = true;
 
-        async function gameinit() {
 
-            var success = false;
+        function setupViewport(width) {
+            var element = document.querySelector("meta[name=viewport]");
+            if (!element) {
+                element = document.createElement("meta");
+                element.name = "viewport";
+                element.content = "width=" + width + ", user-scalable=no";
+                document.getElementsByTagName('head')[0].appendChild(element);
+            }
+            else {
+                element.content = "width=" + width + ", user-scalable=no";
+            }
+        }
+        setupViewport(320);
+
+        function gameinit() {
+            detectMobile()
             if (document.readyState === 'complete') {
                 if (typeof mraid !== 'undefined') {
-                    var resolve = await fixOrientation()
+                    mraid.setOrientationProperties({ "allowOrientationChange": false, "forceOrientation": "portrait" });
                     var screenSize = mraid.getScreenSize();
                     width = screenSize.width;
                     height = screenSize.height;
-
-                    console.log(' 70 width: ' + width);
-                    console.log(' 71 height: ' + height);
-
                     if ((window.orientation == 90) || (window.orientation == - 90)) {
-                        // If device is in portrait swap dimensions
                         width = screenSize.height;
                         height = screenSize.width;
-                    }
-
-                    console.log(' 78 width: ' + width);
-                    console.log(' 79 height: ' + height);
-                    console.log('window.orientation : ', window.orientation);
-                    // var t = 0
-                    //                     setInterval(function () {
-                    //                         width = window.innerWidth
-                    //                             || document.documentElement.clientWidth
-                    //                             || document.body.clientWidth;
-
-                    //                         height = window.innerHeight
-                    //                             || document.documentElement.clientHeight
-                    //                             || document.body.clientHeight;
-                    //                         width = isMobile ? width : height / 1.7;
-                    //                         console.log('lan: ', t);
-                    //                         console.log('width: ' + width);
-                    //                         console.log('height: ' + height);
-                    //                         t++
-                    //                     }, 1000);
-                    // var orientation = mraid.getOrientationProperties();
-                    // console.log(orientation.allowOrientationChange);
-                    // console.log(orientation.forceOrientation);
-                    // console.log('resolve');
-                    // console.log(resolve);
+                    };
                     if (mraid.getState() === 'loading') {
                         mraid.addEventListener('ready', displayAd);
                     } else if (mraid.getState() === 'default') {
                         displayAd();
                     };
-                    success = true;
                 };
             };
-            return success;
-        };
-        function fixOrientation() {
-            console.log('change');
-            var orientation = mraid.getOrientationProperties();
-            console.log(orientation.allowOrientationChange);
-            console.log(orientation.forceOrientation);
-            return new Promise(resolve => {
-                mraid.setOrientationProperties({
-                    "allowOrientationChange": false,
-                    "forceOrientation": 'portrait'
-                });
-                resolve(11111111);
-
-            });
         };
         async function displayAd() {
             createjs.RotationPlugin.install();
@@ -335,26 +294,14 @@
             setPlayer(2);
         }
         function addEvent() {
-            if (isMobile) {
-                canvas.addEventListener("touchstart", onMouseDown, supportsPassive ? { passive: true } : false);
-                canvas.addEventListener("touchmove", onPressMove, supportsPassive ? { passive: true } : false);
-                canvas.addEventListener("touchend", onMouseUp, supportsPassive ? { passive: true } : false);
-            } else {
-                canvas.addEventListener("mousedown", onMouseDown);
-                canvas.addEventListener("mousemove", onPressMove);
-                canvas.addEventListener("mouseup", onMouseUp);
-            };
+            canvas.addEventListener("touchstart", onMouseDown, supportsPassive ? { passive: true } : false);
+            canvas.addEventListener("touchmove", onPressMove, supportsPassive ? { passive: true } : false);
+            canvas.addEventListener("touchend", onMouseUp, supportsPassive ? { passive: true } : false);
         };
         function removeEvent() {
-            if (isMobile) {
-                canvas.removeEventListener("touchstart", onMouseDown, supportsPassive ? { passive: true } : false);
-                canvas.removeEventListener("touchmove", onPressMove, supportsPassive ? { passive: true } : false);
-                canvas.removeEventListener("touchend", onMouseUp, supportsPassive ? { passive: true } : false);
-            } else {
-                canvas.removeEventListener("mousedown", onMouseDown);
-                canvas.removeEventListener("mousemove", onPressMove);
-                canvas.removeEventListener("mouseup", onMouseUp);
-            };
+            canvas.removeEventListener("touchstart", onMouseDown, supportsPassive ? { passive: true } : false);
+            canvas.removeEventListener("touchmove", onPressMove, supportsPassive ? { passive: true } : false);
+            canvas.removeEventListener("touchend", onMouseUp, supportsPassive ? { passive: true } : false);
         };
         function setStage() {
             canvas = document.getElementById("myCanvas");
@@ -1472,7 +1419,6 @@
                 });
                 return complete;
             };
-
         };
         async function setStar() {
             var complete = await checkComplete();
@@ -1481,7 +1427,6 @@
                 stage.removeChild(tay);
                 clearInterval(handMove);
                 win = false;
-
                 removeEvent();
                 stage.removeChild(install_now);
                 setInterval(emitParticles, (Math.random() * 700) + 300);
@@ -1722,7 +1667,7 @@
             containerLine = new createjs.Container();
         };
         function currentMouse(evt) {
-            return isMobile ? { x: evt.changedTouches[0].clientX, y: evt.changedTouches[0].clientY } : { x: evt.layerX, y: evt.layerY };
+            return { x: evt.changedTouches[0].clientX, y: evt.changedTouches[0].clientY }
         }
 
         function limitAngle(mouseangle) {
