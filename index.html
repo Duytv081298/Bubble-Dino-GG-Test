@@ -65,14 +65,15 @@
             detectMobile()
             if (document.readyState === 'complete') {
                 if (typeof mraid !== 'undefined') {
-                    mraid.setOrientationProperties({ "allowOrientationChange": false, "forceOrientation": "portrait" });
+                    // mraid.setOrientationProperties({ "allowOrientationChange": false, "forceOrientation": "portrait" });
+                    mraid.setOrientationProperties({ "allowOrientationChange": false });
                     var screenSize = mraid.getScreenSize();
                     width = screenSize.width;
                     height = screenSize.height;
-                    if ((window.orientation == 90) || (window.orientation == - 90)) {
-                        width = screenSize.height;
-                        height = screenSize.width;
-                    };
+                    // if ((window.orientation == 90) || (window.orientation == - 90)) {
+                    //     width = screenSize.height;
+                    //     height = screenSize.width;
+                    // };
                     if (mraid.getState() === 'loading') {
                         mraid.addEventListener('ready', displayAd);
                     } else if (mraid.getState() === 'default') {
@@ -255,7 +256,6 @@
                     [424, 544, 34, 32, 0, -10, -11],
                     [424, 578, 33, 31, 0, -11, -11]
                 ],
-
                 animations: {
                     bg1: { frames: [0] },
                     text: { frames: [1] },
