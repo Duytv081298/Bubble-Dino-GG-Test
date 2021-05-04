@@ -70,9 +70,17 @@
                     var screenSize = mraid.getScreenSize();
                     width = screenSize.width;
                     height = screenSize.height;
+                    
+                    console.log('nam dọc');
+                        console.log('width ', screenSize.width);
+                        console.log('height ', screenSize.height);
+
                     if ((window.orientation == 0) || (window.orientation == 180)) {
-                        width = screenSize.height / 1.7;
-                        height = screenSize.width*0.9;
+                        console.log('nam nang');
+                        console.log('width ', screenSize.width);
+                        console.log('height ', screenSize.height);
+                        // width = screenSize.height / 1.7;
+                        // height = screenSize.width*0.9;
                     };
                     if (mraid.getState() === 'loading') {
                         mraid.addEventListener('ready', displayAd);
