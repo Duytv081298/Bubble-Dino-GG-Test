@@ -1749,14 +1749,18 @@
         function getLinkInstall() {
             var userAgent = navigator.userAgent || navigator.vendor || window.opera;
             if (/windows phone/i.test(userAgent)) {
+                mraid.setOrientationProperties({ "allowOrientationChange": true });
                 return "null";
             };
             if (/android/i.test(userAgent)) {
+                mraid.setOrientationProperties({ "allowOrientationChange": true });
                 mraid.open("https://play.google.com/store/apps/details?id=bubble.shooter.primitive.dinosaurs.egg.shot");
             };
             if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                mraid.setOrientationProperties({ "allowOrientationChange": true });
                 return "null";
             };
+            mraid.setOrientationProperties({ "allowOrientationChange": true });
             return "null";
         };
 
