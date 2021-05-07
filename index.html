@@ -560,7 +560,7 @@
             rect.y = stage.canvas.height * 0.025 - stage.canvas.height / 52;
 
             text_scores = new createjs.Text(game.scores + " / " + game.total_score, "bold 22px Impact", "#722b1b");
-            text_scores.x = stage.canvas.width / 10;
+            text_scores.x = stage.canvas.width / 10.5;
             text_scores.y = stage.canvas.height * 0.035;
             text_scores.scale = stage.canvas.width / 555;
             text_scores.textBaseline = "alphabetic";
@@ -583,29 +583,15 @@
             hand.scale = stage.canvas.width / 420;
             hand.x = stage.canvas.width / 2 - hand.getBounds().width * hand.scale / 2;
             hand.y = stage.canvas.height * 1.9 / 3;
-
-            // var t = new createjs.Text('- - - - - -          - - - - - -', "bold 40px Impact", "#b11ced");
-            // t.x = stage.canvas.width / 2;
-            // t.y = stage.canvas.height * 1.97 / 3;
-            // t.scale = stage.canvas.width / 500;
-            // t.textAlign = 'center';
-            // t.textBaseline = "alphabetic";
-            // t3 = t.clone();
-            // t3.text = '<                                         >';
-            // t3.y = stage.canvas.height * 1.98 / 3;
-
             var tut = new createjs.Sprite(spriteSheet, 'tut');
 
             tut.scaleX = (stage.canvas.width * 2.5 / 3) / tut.getBounds().width
             tut.scaleY = (stage.canvas.height / 35) / tut.getBounds().height
-            // if ((window.orientation == 90) || (window.orientation == -90)) {
-            //     tut.scaleY = 0.8
-            // };
             tut.x = stage.canvas.width / 2 - tut.getBounds().width * tut.scaleX / 2;
             tut.y = stage.canvas.height * 1.85 / 3;
 
             createjs.Tween.get(hand, { loop: true })
-                .to({ x: stage.canvas.width * 3.5 / 5 }, 800)
+                .to({ x: stage.canvas.width * 3.6 / 5 }, 800)
                 .to({ x: stage.canvas.width / 2 - hand.getBounds().width * hand.scale / 2 }, 1000)
                 .to({ x: stage.canvas.width * 0.5 / 5 }, 800)
                 .to({ x: stage.canvas.width / 2 - hand.getBounds().width * hand.scale / 2 }, 1000);
