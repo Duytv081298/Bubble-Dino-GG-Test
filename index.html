@@ -529,7 +529,7 @@
             textContainer = new createjs.Container();
             var t1 = new createjs.Text("SAVE THE BABY DINOS", "bold 40px Impact", "#ffffff");
             t1.x = stage.canvas.width / 2;
-            t1.y = stage.canvas.height * 2 / 3;
+            t1.y = stage.canvas.height * 1.85 / 3;
             t1.textAlign = 'center';
             t1.scale = 0;
             t1.textBaseline = "alphabetic";
@@ -539,9 +539,9 @@
             textContainer.addChild(t1, t2);
 
             createjs.Tween.get(t1)
-                .to({ scale: stage.canvas.width / 530 }, 500);
+                .to({ scale: stage.canvas.width / 510 }, 500);
             createjs.Tween.get(t2)
-                .to({ scale: stage.canvas.width / 530 }, 500);
+                .to({ scale: stage.canvas.width / 510 }, 500);
 
 
 
