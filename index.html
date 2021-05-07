@@ -583,21 +583,27 @@
             hand.scale = stage.canvas.width / 420;
             hand.x = stage.canvas.width / 2 - hand.getBounds().width * hand.scale / 2;
             hand.y = stage.canvas.height * 1.9 / 3;
-            var t = new createjs.Text('- - - - - -          - - - - - -', "bold 40px Impact", "#b11ced");
-            t.x = stage.canvas.width / 2;
-            t.y = stage.canvas.height * 1.97 / 3;
-            t.scale = stage.canvas.width / 500;
-            t.textAlign = 'center';
-            t.textBaseline = "alphabetic";
-            t3 = t.clone();
-            t3.text = '<                                         >';
-            t3.y = stage.canvas.height * 1.98 / 3;
+
+            // var t = new createjs.Text('- - - - - -          - - - - - -', "bold 40px Impact", "#b11ced");
+            // t.x = stage.canvas.width / 2;
+            // t.y = stage.canvas.height * 1.97 / 3;
+            // t.scale = stage.canvas.width / 500;
+            // t.textAlign = 'center';
+            // t.textBaseline = "alphabetic";
+            // t3 = t.clone();
+            // t3.text = '<                                         >';
+            // t3.y = stage.canvas.height * 1.98 / 3;
+
+            var tut = new createjs.Sprite(spriteSheet, 'tut');
+            tut.x = stage.canvas.width / 2;
+            tut.y = stage.canvas.height * 1.97 / 3;
+
             createjs.Tween.get(hand, { loop: true })
                 .to({ x: stage.canvas.width * 3.5 / 5 }, 800)
                 .to({ x: stage.canvas.width / 2 - hand.getBounds().width * hand.scale / 2 }, 1000)
                 .to({ x: stage.canvas.width * 0.5 / 5 }, 800)
                 .to({ x: stage.canvas.width / 2 - hand.getBounds().width * hand.scale / 2 }, 1000);
-            tay.addChild(hand, t, t3);
+            tay.addChild(hand, tut);
 
             containerPoint.addChild(rect, circle, text_scores, avatar);
 
