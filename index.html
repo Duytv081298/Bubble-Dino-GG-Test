@@ -595,8 +595,8 @@
             // t3.y = stage.canvas.height * 1.98 / 3;
 
             var tut = new createjs.Sprite(spriteSheet, 'tut');
-            tut.x = stage.canvas.width / 2;
-            tut.y = stage.canvas.height * 1.97 / 3;
+            tut.x = stage.canvas.width / 2 - tut.getBounds().width * tut.scale / 2;
+            tut.y = stage.canvas.height * 1.9 / 3;
 
             createjs.Tween.get(hand, { loop: true })
                 .to({ x: stage.canvas.width * 3.5 / 5 }, 800)
