@@ -595,8 +595,9 @@
             // t3.y = stage.canvas.height * 1.98 / 3;
 
             var tut = new createjs.Sprite(spriteSheet, 'tut');
-            
-            tut.scale = stage.canvas.width*2 / 3
+
+            tut.scaleX = (stage.canvas.width * 2 / 3) / tut.getBounds().width
+            tut.scaleX = (stage.canvas.height /35) / tut.getBounds().height
             // if ((window.orientation == 90) || (window.orientation == -90)) {
             //     tut.scaleY = 0.8
             // };
@@ -608,7 +609,7 @@
                 .to({ x: stage.canvas.width / 2 - hand.getBounds().width * hand.scale / 2 }, 1000)
                 .to({ x: stage.canvas.width * 0.5 / 5 }, 800)
                 .to({ x: stage.canvas.width / 2 - hand.getBounds().width * hand.scale / 2 }, 1000);
-            tay.addChild( tut, hand);
+            tay.addChild(tut, hand);
 
             containerPoint.addChild(rect, circle, text_scores, avatar);
 
