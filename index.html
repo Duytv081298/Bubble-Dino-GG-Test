@@ -567,6 +567,10 @@
             avatar.regY = (avatar.getBounds().height * avatar.scaleY) / 2;
             avatar.x = stage.canvas.width / 35;
             avatar.y = stage.canvas.height * 0.015;
+            if ((window.orientation == 90) || (window.orientation == -90)) {
+                avatar.x = stage.canvas.width / 40;
+            avatar.y = stage.canvas.height * 0.01;
+                    };
 
             tay = new createjs.Container();
 
