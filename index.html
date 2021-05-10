@@ -27,7 +27,7 @@
         var player = { x: 0, y: 0, v: 1.5, angle: 0, bubble: null, color: [], currentColor: null, end: null };
         var destinations = [],
             bubbleRemove = [];
-        var textContainer,
+        var textNew,
             containerPoint,
             text_scores,
             avatar,
@@ -541,19 +541,12 @@
                 else if (row[0].y < 0) mapAm.push(row);
             });
             stage.addChild(containerMain);
-            textContainer = new createjs.Container();
-            var t1 = new createjs.Text("SAVE THE BABY DINOS", "bold 40px Impact", "#ffffff");
-            t1.x = stage.canvas.width / 2;
-            t1.y = (stage.canvas.height * 1.95) / 3;
-            t1.textAlign = "center";
-            t1.scale = 0;
-            t1.textBaseline = "alphabetic";
-            var t2 = t1.clone();
-            t2.outline = 2;
-            t2.color = "#bd3bc2";
-            textContainer.addChild(t1, t2);
-            createjs.Tween.get(t1).to({ scale: stage.canvas.width / 510 }, 500);
-            createjs.Tween.get(t2).to({ scale: stage.canvas.width / 510 }, 500);
+
+            textNew = new createjs.Sprite(spriteSheet, 'text')
+            textNew.scale = (stage.canvas.width / 1.55) / textNew.getBounds().width
+            textNew.x = (stage.canvas.width - textNew.getBounds().width * textNew.scale) / 2;
+            textNew.y = stage.canvas.height * 1.9 / 3;
+
             containerPoint = new createjs.Container();
             var circle = new createjs.Shape();
             circle.graphics
@@ -605,7 +598,7 @@
                 .to({ x: stage.canvas.width / 2 - (hand.getBounds().width * hand.scale) / 2 }, 1000);
             tay.addChild(tut, hand);
             containerPoint.addChild(rect, circle, text_scores, avatar);
-            stage.addChild(textContainer, containerPoint);
+            stage.addChild(textNew, containerPoint);
         }
         function setPlayer(color) {
             var id;
@@ -1566,7 +1559,7 @@
             downtime = 0;
             stage.removeChild(tay);
             pressMove = true;
-            stage.removeChild(textContainer);
+    stage.removeChild(textNew)
             var location = currentMouse(evt);
             var anpha = radToDeg(location.x - player.x, location.y - player.y) + 180;
             if (anpha >= 8 && anpha <= 172) {
@@ -1676,7 +1669,7 @@
         }
         var handMove = setInterval(function () {
             if (downtime == 5) {
-                stage.removeChild(textContainer);
+        stage.removeChild(textNew)
                 stage.removeChild(tay);
                 stage.addChild(tay);
             }
