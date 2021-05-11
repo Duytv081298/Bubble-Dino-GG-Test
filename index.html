@@ -1110,7 +1110,6 @@
         }
         async function removeBubble(x, y) {
             await boom(x, y, checkDie);
-            setPlayer();
             if (bubbleRemove.length >= 3) {
                 var arrL = [],
                     arrS = [];
@@ -1279,7 +1278,9 @@
                             }
                         });
                 });
+                setPlayer();
             } else {
+                setPlayer();
                 var itemEnd = getItemEnd();
                 addRow();
                 if (itemEnd) {
