@@ -622,31 +622,53 @@
             var arColor = [];
             player.color = [];
             var itemEnd = getItemEnd();
-            if (itemEnd.y > 3) {
-                for (let row = itemEnd.y; row >= itemEnd.y - 3; row--) {
-                    for (let i = 0; i < mapDuong[row].length; i++) {
-                        if (mapDuong[row][i].color != null && mapDuong[row][i].color < 20 && mapDuong[row][i].color != 7) {
-                            if (mapDuong[row][i].color >= 10) {
-                                arColor.push(mapDuong[row][i].color - 10);
-                            } else {
-                                arColor.push(mapDuong[row][i].color);
-                            }
-                        }
-                    }
-                }
+            var y;
+            loop1:
+            for (let i = mapDuong.length - 1; i >= itemEnd.y - 4; i--) {
+                var lengthI = mapDuong[i].length;
+                loop2:
+                for (let j = 0; j < mapDuong[i].length; j++) {
+                    if (mapDuong[i][j].existing == true) lengthI -= 1;
+                    if (j == mapDuong[i].length - 1 && lengthI == 0) {
+                        y = i;
+                        break loop1;
+                    };
+                };
+            };
+            if (y) {
+
+                mapDuong[y].forEach(item => {
+                    if (item.color < 7) arColor.push(item.color);
+                });
             } else {
-                for (let row = 0; row <= itemEnd.y; row++) {
-                    for (let i = 0; i < mapDuong[row].length; i++) {
-                        if (mapDuong[row][i].color != null && mapDuong[row][i].color < 20 && mapDuong[row][i].color != 7) {
-                            if (mapDuong[row][i].color >= 10) {
-                                arColor.push(mapDuong[row][i].color - 10);
-                            } else {
-                                arColor.push(mapDuong[row][i].color);
-                            }
-                        }
-                    }
-                }
-            }
+                if (itemEnd.y > 3) {
+                    for (let row = itemEnd.y; row >= itemEnd.y - 3; row--) {
+                        for (let i = 0; i < mapDuong[row].length; i++) {
+                            if (mapDuong[row][i].color != null && mapDuong[row][i].color < 20 && mapDuong[row][i].color != 7) {
+                                if (mapDuong[row][i].color >= 10) {
+                                    arColor.push(mapDuong[row][i].color - 10);
+                                } else {
+                                    arColor.push(mapDuong[row][i].color);
+                                };
+                            };
+                        };
+                    };
+                } else {
+                    for (let row = 0; row <= itemEnd.y; row++) {
+                        for (let i = 0; i < mapDuong[row].length; i++) {
+                            if (mapDuong[row][i].color != null && mapDuong[row][i].color < 20 && mapDuong[row][i].color != 7) {
+                                if (mapDuong[row][i].color >= 10) {
+                                    arColor.push(mapDuong[row][i].color - 10);
+                                } else {
+                                    arColor.push(mapDuong[row][i].color);
+                                };
+                            };
+                        };
+                    };
+                };
+            };
+
+
             player.color = arColor;
             if (player.color.length == 0) player.color.push(1);
         }
@@ -1559,7 +1581,7 @@
             downtime = 0;
             stage.removeChild(tay);
             pressMove = true;
-    stage.removeChild(textNew)
+            stage.removeChild(textNew)
             var location = currentMouse(evt);
             var anpha = radToDeg(location.x - player.x, location.y - player.y) + 180;
             if (anpha >= 8 && anpha <= 172) {
@@ -1669,7 +1691,7 @@
         }
         var handMove = setInterval(function () {
             if (downtime == 5) {
-        stage.removeChild(textNew)
+                stage.removeChild(textNew)
                 stage.removeChild(tay);
                 stage.addChild(tay);
             }
