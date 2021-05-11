@@ -1278,7 +1278,6 @@
                             }
                         });
                 });
-                setPlayer();
             } else {
                 setPlayer();
                 var itemEnd = getItemEnd();
@@ -1319,6 +1318,7 @@
                 }
             }
             refreshMap();
+            setPlayer();
         }
         function turnDow() {
             var itemEnd = getItemEnd();
@@ -1356,6 +1356,7 @@
                 });
             });
             refreshMap();
+            setPlayer();
         }
         function turnUp() {
             var itemEnd = getItemEnd();
@@ -1393,6 +1394,7 @@
                 });
             });
             refreshMap();
+            setPlayer();
         }
         function getItemEnd() {
             var itemEnd = null;
