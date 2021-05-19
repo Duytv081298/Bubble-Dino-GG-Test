@@ -40,7 +40,7 @@
             end: null
         };
         var destinations = [], bubbleRemove = [];
-        var textContainer, containerPoint, text_scores, avatar, downtime = 0, tay;
+        var containerPoint, text_scores, avatar, downtime = 0, tay;
         var containerMain = new createjs.Container();
         var spriteSheet;
         var win = true;
@@ -598,11 +598,6 @@
                 else if (row[0].y < 0) mapAm.push(row);
             });
             stage.addChild(containerMain);
-            textContainer = new createjs.Sprite(spriteSheet, 'text');
-            textContainer.scale = (stage.canvas.width / 1.55) / textContainer.getBounds().width;
-            textContainer.x = (stage.canvas.width - textContainer.getBounds().width * textContainer.scale) / 2;
-            textContainer.y = stage.canvas.height * 1.9 / 3;
-
             containerPoint = new createjs.Container();
             var circle = new createjs.Shape();
             circle.graphics
@@ -654,7 +649,7 @@
                 .to({ x: stage.canvas.width / 2 - (hand.getBounds().width * hand.scale) / 2 }, 1000);
             tay.addChild(tut, hand);
             containerPoint.addChild(rect, circle, text_scores, avatar);
-            stage.addChild(textContainer, containerPoint);
+            stage.addChild(containerPoint);
 
         }
         function setPlayer(color) {
@@ -1634,7 +1629,6 @@
             downtime = 0;
             stage.removeChild(tay);
             pressMove = true;
-            stage.removeChild(textContainer);
             var location = currentMouse(evt);
             var anpha = radToDeg(location.x - player.x, location.y - player.y) + 180;
             if (anpha >= 8 && anpha <= 172) {
@@ -1758,7 +1752,6 @@
         }
         var handMove = setInterval(function () {
             if (downtime == 5) {
-                stage.removeChild(textContainer);
                 stage.removeChild(tay);
                 stage.addChild(tay);
             }
