@@ -283,7 +283,6 @@
             setDinosaursAndBird();
             renderBubble();
             setPlayer(2);
-            stage.addChild(tay);
         }
 
         function changeOrientation() {
@@ -650,7 +649,7 @@
                 .to({ x: stage.canvas.width / 2 - (hand.getBounds().width * hand.scale) / 2 }, 1000);
             tay.addChild(tut, hand);
             containerPoint.addChild(rect, circle, text_scores, avatar);
-            stage.addChild(containerPoint);
+            stage.addChild(containerPoint, tay);
 
         }
         function setPlayer(color) {
