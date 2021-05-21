@@ -13,7 +13,7 @@ var canvas, stage, context, update = true;
 var supportsPassive = false, pressMove = false;
 var containerLine = new createjs.Container();
 var indexClarity = [];
-var outer1, outer2, install_now; 
+var outer1, outer2, install_now;
 var queue, game = {
     indexBubbleInlocal: null,
     map: [],
@@ -113,7 +113,7 @@ const mapIndexD = [
     [6, 6, 6, 2, 2, 2, 2, 2, 6, 6, 3, 3, 3, 6, 4, 4, 4, 4, 4],
     [5, 5, 2, 2, 5, 5, 2, 2, 6, 3, 3, 3, 3, 6, 6, 6, 4, 4],
     [5, 5, 2, 2, 5, 5, 2, 2, 3, 3, 3, 3, 3, 6, 6, 6, 6, 6, 6],
-    [6, 6, 6, -1, -1, -1, -1, -1, 5, 5, 5, 5, 5, 4, 4, 4, 3, 3],
+    [6, 6, 6, -1, -1, -1, -1, 5, 5, 5, 5, 5, 5, 4, 4, 4, 3, 3],
     [6, 6, 6, 6, 0, -1, -1, 0, 3, 2, 5, 5, 5, 5, 4, 4, 3, 3, 3],
     [3, 6, 6, 5, -1, -1, 6, -1, 0, 5, -1, 5, 5, 4, 4, 3, 3, 3],
     [6, 6, 6, 6, 0, -1, -1, 0, -1, -1, -1, 6, 0, -1, 6, 6, 0, 4, -1]],
@@ -380,11 +380,30 @@ function setLevel() {
     txtChoose.y = btnEasy.y + btnEasy.getBounds().height * btnEasy.scale + stage.canvas.height / 12
     txtChoose.scale = (stage.canvas.width * 2.5 / 3) / txtChoose.getMeasuredWidth();
     txtChoose.x = (stage.canvas.width - txtChoose.getMeasuredWidth() * txtChoose.scale) / 2
+
     stage.addChild(icon, btnEasy, btnHard, btnMedium, txtChoose);
 
-
+    var scaleTxt = txtChoose.scale
+    createjs.Tween.get(txtChoose, { loop: 1 })
+        .to({
+            scale: scaleTxt - 0.2,
+            x: (stage.canvas.width - txtChoose.getMeasuredWidth() * (scaleTxt - 0.1)) / 2
+        }, 400)
+        .to({
+            scale: scaleTxt,
+            x: (stage.canvas.width - txtChoose.getMeasuredWidth() * scaleTxt) / 2
+        }, 400)
+    setTimeout(function () {
+        createjs.Tween.get(txtChoose)
+            .to({
+                scale: scaleTxt - 0.2,
+                x: (stage.canvas.width - txtChoose.getMeasuredWidth() * (scaleTxt - 0.1)) / 2,
+                alpha: 0,
+            }, 400)
+    }, 1600);
 
     var handChoose = new createjs.Sprite(spriteSheet, "tay");
+    handChoose.scale = (stage.canvas.width/10) / handChoose.getBounds().width
     handChoose.x = (stage.canvas.width - handChoose.getBounds().width * handChoose.scale) / 2
     handChoose.y = btnMedium.y + btnMedium.getBounds().height * btnMedium.scale / 2
 
@@ -394,10 +413,17 @@ function setLevel() {
         (stage.canvas.width - handChoose.getBounds().width * handChoose.scale) / 2,
         btnHard.x + btnHard.getBounds().width * btnHard.scale / 2,
     ];
-    const yMove = btnEasy.y + btnEasy.getBounds().height * btnEasy.scale *2
+    const yMove = btnEasy.y + btnEasy.getBounds().height * btnEasy.scale * 2
     const defaultY = btnMedium.y + btnMedium.getBounds().height * btnMedium.scale / 2
     var indexXTemp = 1;
-    moveTayChoose =  setInterval(function () {
+    animation()
+    moveTayChoose = setInterval(animation, 1300);
+
+    function animation() {
+        tayDefault()
+        btnEasyDefault()
+        btnMediumDefault()
+        btnHardDefault()
         var indexX = Math.floor(Math.random() * 3);
         while (indexXTemp == indexX) {
             indexX = Math.floor(Math.random() * 3);
@@ -412,12 +438,73 @@ function setLevel() {
                     arrX[indexX], defaultY,
                 ]
             }
-        }, 1500);
+        }, 1000)
+            .call(() => {
+                switch (indexX) {
+                    case 0:
+                        var scale = btnEasy.scale;
+                        createjs.Tween.get(btnEasy).to({
+                            scale: scale - 0.1,
+                            x: btnMedium.x - (btnMedium.getBounds().width * (scale - 0.1) * 1.1)
+                        }, 200);
+                        tayChoose()
+                        break;
+                    case 1:
+                        var scale = btnMedium.scale;
+                        createjs.Tween.get(btnMedium).to({
+                            scale: scale - 0.1,
+                        }, 200);
+                        tayChoose()
+                        break;
+                    case 2:
+                        var scale = btnHard.scale;
+                        createjs.Tween.get(btnHard).to({
+                            scale: scale - 0.1,
+                        }, 200);
+                        tayChoose()
+                        break;
+                    default:
+                        return null;
+                }
+            })
         indexXTemp = indexX
-
-    }, 2000);
-
+    }
+    function tayChoose() {
+        var scale = handChoose.scale
+        createjs.Tween.get(handChoose).to({
+            scale: scale - 0.1,
+        }, 200);
+    }
+    function tayDefault() {
+        var scale = (stage.canvas.width/10) / handChoose.getBounds().width;
+        createjs.Tween.get(handChoose).to({
+            scale: scale,
+        }, 100)
+    }
+    function btnEasyDefault() {
+        var scale = (stage.canvas.width / 3.5) / btnEasy.getBounds().width;
+        var btnMediumX = (stage.canvas.width - btnMedium.getBounds().width * scale) / 2
+        createjs.Tween.get(btnEasy).to({
+            scale: scale,
+            x: btnMediumX - (btnMedium.getBounds().width * scale * 1.1)
+        }, 100)
+    }
+    function btnMediumDefault() {
+        var scale = (stage.canvas.width / 3.5) / btnEasy.getBounds().width;
+        createjs.Tween.get(btnMedium).to({
+            scale: scale,
+        }, 100)
+    }
+    function btnHardDefault() {
+        var scale = (stage.canvas.width / 3.5) / btnEasy.getBounds().width;
+        var btnMediumX = (stage.canvas.width - btnMedium.getBounds().width * scale) / 2
+        createjs.Tween.get(btnHard).to({
+            scale: scale,
+            x: btnMediumX + (btnMedium.getBounds().width * scale * 1.1)
+        }, 100)
+    }
 }
+
 function startLevel(level) {
     clearInterval(moveTayChoose);
     stage.removeAllChildren();
@@ -696,8 +783,8 @@ function setDinosaursAndBird() {
     hand_dinosaur.scaleY = body_dinosaur.scaleX;
     hand_dinosaur.x = stage.canvas.width / 3 - (body_dinosaur.getBounds().width * body_dinosaur.scaleX) / 2;
     hand_dinosaur.y = stage.canvas.height - (body_dinosaur.getBounds().height * body_dinosaur.scaleX) / 2.1 - stage.canvas.height / 11;
-        dinosaur.addChild(body_dinosaur, hand_dinosaur);
-        
+    dinosaur.addChild(body_dinosaur, hand_dinosaur);
+
     install_now = new createjs.Sprite(spriteSheet, "install_now");
     install_now.scaleX = stage.canvas.width / 4.5 / install_now.getBounds().width;
     install_now.scaleY = stage.canvas.width / 4.5 / install_now.getBounds().width;
@@ -740,9 +827,9 @@ function setDinosaursAndBird() {
         textLife.y = outer1.y - outer1.regX / 3
         textLife.scale = (stage.canvas.width / 30) / textLife.getMeasuredWidth();
         textLife.x = (stage.canvas.width - textLife.getMeasuredWidth() * textLife.scale) / 2
-        player.y = outer1.y- game.bubble.currentHeight *2;
+        player.y = outer1.y - game.bubble.currentHeight * 2;
     } else {
-        player.y = outer1.y- game.bubble.currentHeight *1.3;
+        player.y = outer1.y - game.bubble.currentHeight * 1.3;
         textLife.y = outer1.y - outer1.regX / 5
         textLife.scale = (stage.canvas.width / 20) / textLife.getMeasuredWidth();
         textLife.x = (stage.canvas.width - textLife.getMeasuredWidth() * textLife.scale) / 2
@@ -1940,6 +2027,11 @@ async function setStar() {
         clearInterval(handMove);
         win = false;
         removeEvent();
+
+        containerMain.removeAllChildren();
+        stage.removeChild(containerLine);
+        containerPoint.removeAllChildren();
+        stage.removeChild(containerPoint);
         stage.removeChild(install_now);
         setInterval(emitParticles, Math.random() * 700 + 300);
         setInterval(emitParticles, Math.random() * 700 + 300);
@@ -1969,9 +2061,6 @@ async function setStar() {
             iBubble++;
             if (iBubble == 40) clearInterval(renBubble);
         }, 50);
-        game.map[0].forEach((top) => {
-            containerMain.removeChild(top.bubble);
-        });
         game.map.forEach((row) => {
             row.forEach((bubbles) => {
                 if (bubbles.existing == true && bubbles.color < 20) {
@@ -2006,8 +2095,8 @@ async function setStar() {
                     .to({ scaleX: scale, scaleY: scale, x: x, y: y }, 500, createjs.Ease.linear);
             });
         btn_continue.addEventListener("click", () => { getLinkInstall() }, false);
+        removeEvent();
     } else if ((complete == true && win == false) || (game.scores == game.total_score && win == false)) {
-        console.log('gg');
         game.map.forEach((row) => {
             row.forEach((bubbles) => {
                 if (bubbles.existing == true && bubbles.color < 20) {
