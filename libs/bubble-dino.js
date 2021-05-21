@@ -372,11 +372,11 @@ function setLevel() {
     btnMedium.x = (stage.canvas.width - btnMedium.getBounds().width * btnMedium.scale) / 2
     btnHard.x = btnMedium.x + (btnMedium.getBounds().width * btnMedium.scale * 1.1)
     btnEasy.x = btnMedium.x - (btnMedium.getBounds().width * btnMedium.scale * 1.1)
-    btnEasy.addEventListener("click", () => { startLevel(0) }, false);
-    btnMedium.addEventListener("click", () => { startLevel(1) }, false);
-    btnHard.addEventListener("click", () => { startLevel(2) }, false);
+    btnEasy.addEventListener("click", () => { clickButton(btnEasy, 0) }, false);
+    btnMedium.addEventListener("click", () => { clickButton(btnMedium, 1) }, false);
+    btnHard.addEventListener("click", () => { clickButton(btnHard, 2) }, false);
 
-    var txtChoose = new createjs.Text("Choose level you want to play", "bold 22px Arial", "#f0e592");
+    var txtChoose = new createjs.Text("Choose level you want to play", "bold 30px Arial", "#f0e592");
     txtChoose.y = btnEasy.y + btnEasy.getBounds().height * btnEasy.scale + stage.canvas.height / 12
     txtChoose.scale = (stage.canvas.width * 2.5 / 3) / txtChoose.getMeasuredWidth();
     txtChoose.x = (stage.canvas.width - txtChoose.getMeasuredWidth() * txtChoose.scale) / 2
@@ -384,15 +384,15 @@ function setLevel() {
     stage.addChild(icon, btnEasy, btnHard, btnMedium, txtChoose);
 
     var scaleTxt = txtChoose.scale
-    createjs.Tween.get(txtChoose, { loop: 1 })
+    createjs.Tween.get(txtChoose, { loop: 2 })
         .to({
             scale: scaleTxt - 0.2,
             x: (stage.canvas.width - txtChoose.getMeasuredWidth() * (scaleTxt - 0.1)) / 2
-        }, 400)
+        }, 1000)
         .to({
             scale: scaleTxt,
             x: (stage.canvas.width - txtChoose.getMeasuredWidth() * scaleTxt) / 2
-        }, 400)
+        }, 1000)
     setTimeout(function () {
         createjs.Tween.get(txtChoose)
             .to({
@@ -400,21 +400,23 @@ function setLevel() {
                 x: (stage.canvas.width - txtChoose.getMeasuredWidth() * (scaleTxt - 0.1)) / 2,
                 alpha: 0,
             }, 400)
-    }, 1600);
-
+    }, 4500);
     var handChoose = new createjs.Sprite(spriteSheet, "tay");
-    handChoose.scale = (stage.canvas.width/10) / handChoose.getBounds().width
+    handChoose.scale = (stage.canvas.width / 10) / handChoose.getBounds().width
     handChoose.x = (stage.canvas.width - handChoose.getBounds().width * handChoose.scale) / 2
     handChoose.y = btnMedium.y + btnMedium.getBounds().height * btnMedium.scale / 2
 
     stage.addChild(handChoose)
+
+
     var arrX = [
         btnEasy.x + btnEasy.getBounds().width * btnEasy.scale / 2,
         (stage.canvas.width - handChoose.getBounds().width * handChoose.scale) / 2,
         btnHard.x + btnHard.getBounds().width * btnHard.scale / 2,
     ];
-    const yMove = btnEasy.y + btnEasy.getBounds().height * btnEasy.scale * 2
-    const defaultY = btnMedium.y + btnMedium.getBounds().height * btnMedium.scale / 2
+    var to = true;
+    const yMove = btnEasy.y + btnEasy.getBounds().height * btnEasy.scale * 2;
+    const defaultY = btnMedium.y + btnMedium.getBounds().height * btnMedium.scale / 2;
     var indexXTemp = 1;
     animation()
     moveTayChoose = setInterval(animation, 1300);
@@ -424,9 +426,17 @@ function setLevel() {
         btnEasyDefault()
         btnMediumDefault()
         btnHardDefault()
-        var indexX = Math.floor(Math.random() * 3);
-        while (indexXTemp == indexX) {
-            indexX = Math.floor(Math.random() * 3);
+        var indexX;
+        if (to) {
+            if (indexXTemp + 1 >= 2) {
+                indexX = 2;
+                to = false;
+            } else indexX = indexXTemp + 1;
+        } else {
+            if (indexXTemp - 1 <= 0) {
+                indexX = 0;
+                to = true;
+            } else indexX = indexXTemp - 1;
         }
         var tempX = indexXTemp < indexX ? arrX[indexX] - arrX[indexXTemp] : arrX[indexXTemp] - arrX[indexX];
         createjs.Tween.get(handChoose).to({
@@ -476,7 +486,7 @@ function setLevel() {
         }, 200);
     }
     function tayDefault() {
-        var scale = (stage.canvas.width/10) / handChoose.getBounds().width;
+        var scale = (stage.canvas.width / 10) / handChoose.getBounds().width;
         createjs.Tween.get(handChoose).to({
             scale: scale,
         }, 100)
@@ -502,6 +512,23 @@ function setLevel() {
             scale: scale,
             x: btnMediumX + (btnMedium.getBounds().width * scale * 1.1)
         }, 100)
+    }
+    function clickButton(target, level) {
+        stage.removeChild(handChoose);
+        clearInterval(moveTayChoose);
+        createjs.Tween.removeTweens(btnEasy)
+        createjs.Tween.removeTweens(btnMedium)
+        createjs.Tween.removeTweens(btnHard)
+        btnEasyDefault()
+        btnMediumDefault()
+        btnHardDefault()
+        var scale = target.scale;
+        createjs.Tween.get(target)
+            .to({ scale: scale - 0.1 }, 200)
+            .wait(100)
+            .call(() => {
+                startLevel(level)
+            })
     }
 }
 
