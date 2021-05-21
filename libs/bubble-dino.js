@@ -8,12 +8,12 @@ var height = window.innerHeight
     || document.documentElement.clientHeight
     || document.body.clientHeight;
 width = isMobile ? width : height / 1.7;
-var bigSize = false;
+var bigSize = false, moveTayChoose;
 var canvas, stage, context, update = true;
 var supportsPassive = false, pressMove = false;
 var containerLine = new createjs.Container();
 var indexClarity = [];
-var outer1, outer2, install_now;
+var outer1, outer2, install_now; 
 var queue, game = {
     indexBubbleInlocal: null,
     map: [],
@@ -126,7 +126,6 @@ async function gameinit() {
     createjs.Ticker.framerate = 60;
     createjs.Ticker.addEventListener("tick", tick);
 }
-
 async function loadImage() {
     queue = new createjs.LoadQueue(false);
     var manifest = [
@@ -382,8 +381,45 @@ function setLevel() {
     txtChoose.scale = (stage.canvas.width * 2.5 / 3) / txtChoose.getMeasuredWidth();
     txtChoose.x = (stage.canvas.width - txtChoose.getMeasuredWidth() * txtChoose.scale) / 2
     stage.addChild(icon, btnEasy, btnHard, btnMedium, txtChoose);
+
+
+
+    var handChoose = new createjs.Sprite(spriteSheet, "tay");
+    handChoose.x = (stage.canvas.width - handChoose.getBounds().width * handChoose.scale) / 2
+    handChoose.y = btnMedium.y + btnMedium.getBounds().height * btnMedium.scale / 2
+
+    stage.addChild(handChoose)
+    var arrX = [
+        btnEasy.x + btnEasy.getBounds().width * btnEasy.scale / 2,
+        btnMedium.x + btnMedium.getBounds().width * btnMedium.scale / 2,
+        btnHard.x + btnHard.getBounds().width * btnHard.scale / 2,
+    ];
+    const yMove = btnEasy.y + btnEasy.getBounds().height * btnEasy.scale *2
+    const defaultY = btnMedium.y + btnMedium.getBounds().height * btnMedium.scale / 2
+    var indexXTemp = 1;
+    moveTayChoose =  setInterval(function () {
+        var indexX = Math.floor(Math.random() * 3);
+        while (indexXTemp == indexX) {
+            indexX = Math.floor(Math.random() * 3);
+        }
+        var tempX = indexXTemp < indexX ? arrX[indexX] - arrX[indexXTemp] : arrX[indexXTemp] - arrX[indexX];
+        createjs.Tween.get(handChoose).to({
+            guide:
+            {
+                path: [
+                    arrX[indexXTemp], defaultY,
+                    tempX, yMove,
+                    arrX[indexX], defaultY,
+                ]
+            }
+        }, 1500);
+        indexXTemp = indexX
+
+    }, 2000);
+
 }
 function startLevel(level) {
+    clearInterval(moveTayChoose);
     stage.removeAllChildren();
     if (level == 2) {
         bigSize = true
@@ -400,20 +436,20 @@ function startLevel(level) {
     switch (level) {
         case 0:
             game.total_score = 38
-            life = 15
+            life = 20
             setDinosaursAndBird();
             renderBubble();
             setPlayer(1);
             break;
         case 1:
             game.total_score = 42
-            life = 15
+            life = 20
             setDinosaursAndBird();
             setPlayer(2);
             renderBubble();
             break;
         case 2:
-            life = 9
+            life = 15
             setDinosaursAndBird();
             setPlayer(6);
             renderBubble();
@@ -651,26 +687,29 @@ function setBackground() {
 function setDinosaursAndBird() {
     var dinosaur = new createjs.Container();
     var body_dinosaur = new createjs.Sprite(spriteSheet, "body_dino");
-    body_dinosaur.scale = (stage.canvas.width / 4.3) / body_dinosaur.getBounds().width;
-    body_dinosaur.x = stage.canvas.width / 2.5 - body_dinosaur.getBounds().width * body_dinosaur.scale;
-    body_dinosaur.y = stage.canvas.height - body_dinosaur.getBounds().height * body_dinosaur.scale - stage.canvas.height / 9;
+    body_dinosaur.scale = (stage.canvas.width / 3) / body_dinosaur.getBounds().width;
+    body_dinosaur.x = stage.canvas.width / 2.9 - body_dinosaur.getBounds().width * body_dinosaur.scale;
+    body_dinosaur.y = stage.canvas.height - body_dinosaur.getBounds().height * body_dinosaur.scale - stage.canvas.height / 11;
+
     var hand_dinosaur = new createjs.Sprite(spriteSheet, "hand_dino");
     hand_dinosaur.scaleX = body_dinosaur.scaleX;
     hand_dinosaur.scaleY = body_dinosaur.scaleX;
-    hand_dinosaur.x = stage.canvas.width / 2.5 - (body_dinosaur.getBounds().width * body_dinosaur.scaleX) / 2;
-    hand_dinosaur.y = stage.canvas.height - (body_dinosaur.getBounds().height * body_dinosaur.scaleX) / 2.1 - stage.canvas.height / 9;
+    hand_dinosaur.x = stage.canvas.width / 3 - (body_dinosaur.getBounds().width * body_dinosaur.scaleX) / 2;
+    hand_dinosaur.y = stage.canvas.height - (body_dinosaur.getBounds().height * body_dinosaur.scaleX) / 2.1 - stage.canvas.height / 11;
+        dinosaur.addChild(body_dinosaur, hand_dinosaur);
+        
     install_now = new createjs.Sprite(spriteSheet, "install_now");
     install_now.scaleX = stage.canvas.width / 4.5 / install_now.getBounds().width;
     install_now.scaleY = stage.canvas.width / 4.5 / install_now.getBounds().width;
     install_now.x = (stage.canvas.width - install_now.getBounds().width * install_now.scaleX) / 2;
     install_now.y = stage.canvas.height - install_now.getBounds().height * install_now.scaleY * 1.7;
-    dinosaur.addChild(body_dinosaur, hand_dinosaur);
+
     createjs.Tween.get(hand_dinosaur, { loop: true }).to({ rotation: -25 }, 1000).to({ rotation: 0 }, 1000);
+
     var bird = new createjs.Sprite(spriteSheet, "owl");
-    bird.scaleX = stage.canvas.width / 8 / bird.getBounds().width;
-    bird.scaleY = stage.canvas.width / 8 / bird.getBounds().width;
+    bird.scale = stage.canvas.width / 5 / bird.getBounds().width;
     bird.x = (stage.canvas.width * 2.8) / 5 + (bird.getBounds().width * bird.scaleX * 2) / 3;
-    bird.y = stage.canvas.height - bird.getBounds().height * bird.scaleX - stage.canvas.height / 9;
+    bird.y = stage.canvas.height - bird.getBounds().height * bird.scaleX - stage.canvas.height / 11;
     stage.addChild(dinosaur, bird, install_now);
     var x = install_now.x,
         y = install_now.y,
@@ -692,18 +731,19 @@ function setDinosaursAndBird() {
     outer1.scale = stage.canvas.width / 5.2 / outer1.getBounds().width;
     outer1.regX = outer1.regY = outer1.getBounds().width / 2;
     outer1.x = stage.canvas.width / 2 + outer1.getBounds().width / 32;
-    outer1.y = body_dinosaur.y + body_dinosaur.getBounds().height * body_dinosaur.scale - outer1.getBounds().height * outer1.scale / 2;
-    player.y = body_dinosaur.y + body_dinosaur.getBounds().height * body_dinosaur.scale - outer1.getBounds().height * outer1.scale - game.bubble.currentHeight / 3.5;
+    outer1.y = body_dinosaur.y + body_dinosaur.getBounds().height * body_dinosaur.scale - outer1.getBounds().height * outer1.scale / 1.4;
+
     outer2 = outer1.clone();
 
     textLife = new createjs.Text(life, "bold 22px Arial", "#f0e592");
     if (bigSize) {
-        textLife.y = outer1.y - outer1.regX / 2
+        textLife.y = outer1.y - outer1.regX / 3
         textLife.scale = (stage.canvas.width / 30) / textLife.getMeasuredWidth();
         textLife.x = (stage.canvas.width - textLife.getMeasuredWidth() * textLife.scale) / 2
+        player.y = outer1.y- game.bubble.currentHeight *2;
     } else {
-
-        textLife.y = outer1.y - outer1.regX / 4
+        player.y = outer1.y- game.bubble.currentHeight *1.3;
+        textLife.y = outer1.y - outer1.regX / 5
         textLife.scale = (stage.canvas.width / 20) / textLife.getMeasuredWidth();
         textLife.x = (stage.canvas.width - textLife.getMeasuredWidth() * textLife.scale) / 2
     }
@@ -1980,7 +2020,6 @@ async function setStar() {
         removeEvent();
     }
 }
-
 async function setLose() {
     var complete = await checkComplete();
     if (complete == false && life == 0 && fail == false) {
@@ -2036,7 +2075,6 @@ async function setLose() {
 
     }
 }
-
 function renderXY(direction, x, y) {
     var xNew = x,
         yNew = y;
