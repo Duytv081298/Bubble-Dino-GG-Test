@@ -390,8 +390,8 @@ function setLevel() {
 
     stage.addChild(handChoose)
     var arrX = [
+        btnEasy.x + btnEasy.getBounds().width * btnEasy.scale / 2,
         (stage.canvas.width - handChoose.getBounds().width * handChoose.scale) / 2,
-        btnMedium.x + btnMedium.getBounds().width * btnMedium.scale / 2,
         btnHard.x + btnHard.getBounds().width * btnHard.scale / 2,
     ];
     const yMove = btnEasy.y + btnEasy.getBounds().height * btnEasy.scale *2
