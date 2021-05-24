@@ -9,7 +9,7 @@
     <script src="mraid.js"></script>
     <script>
 
-        var bigSize = false, moveTayChoose;
+        var bigSize = false, moveTayChoose, levelPlayer;
         var canvas, stage, screenSize, width, height, update = true;
         var supportsPassive = false, pressMove = false;
         var containerLine = new createjs.Container();
@@ -557,6 +557,7 @@
             }
         }
         function startLevel(level) {
+            levelPlayer = level
             clearInterval(moveTayChoose);
             stage.removeAllChildren();
             if (level == 2) {
@@ -2132,10 +2133,12 @@
                 emit1 = setInterval(emitParticles, Math.random() * 700 + 300);
                 emit2 = setInterval(emitParticles, Math.random() * 700 + 300);
                 var colorarr = [];
-                for (let i = 0; i < game.indexBubbleInlocal.length; i++) {
-                    for (let j = 0; j < game.indexBubbleInlocal[i].length; j++) {
-                        if (colorarr.indexOf(game.indexBubbleInlocal[i][j]) === -1 && game.indexBubbleInlocal[i][j] != 100 && game.indexBubbleInlocal[i][j] >= 0 && game.indexBubbleInlocal[i][j] <= 7) {
-                            colorarr.push(game.indexBubbleInlocal[i][j]);
+                
+                const mapEnd =  mapIndexD[levelPlayer]
+                for (let i = 0; i < mapEnd.length; i++) {
+                    for (let j = 0; j < mapEnd[i].length; j++) {
+                        if (colorarr.indexOf(mapEnd[i][j]) === -1 && mapEnd[i][j] != 100 && mapEnd[i][j] >= 0 && mapEnd[i][j] <= 7) {
+                            colorarr.push(mapEnd[i][j]);
                         }
                     }
                 }
