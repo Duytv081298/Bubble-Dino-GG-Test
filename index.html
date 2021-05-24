@@ -608,9 +608,15 @@
             stage.canvas.height = height;
             stage.canvas.width = width;
             addEvent();
-            game.bubble.currentWidth = Math.round((stage.canvas.width / 11) * 100) / 100;
-            game.bubble.currentHeight = Math.round((stage.canvas.width / 11) * 100) / 100;
-            game.bubble.scale = Math.round((stage.canvas.width / 11 / 50) * 100) / 100;
+            if (levelPlayer == 2) {
+                game.bubble.currentWidth = Math.round((stage.canvas.width / 19) * 100) / 100;
+                game.bubble.currentHeight = Math.round((stage.canvas.width / 19) * 100) / 100;
+                game.bubble.scale = Math.round((stage.canvas.width / 19 / 50) * 100) / 100;
+            } else {
+                game.bubble.currentWidth = Math.round((stage.canvas.width / 11) * 100) / 100;
+                game.bubble.currentHeight = Math.round((stage.canvas.width / 11) * 100) / 100;
+                game.bubble.scale = Math.round((stage.canvas.width / 11 / 50) * 100) / 100;
+            }
             var arrIndex = [];
             for (let i = 0; i < game.map.length; i++) {
                 const row = game.map[i];
