@@ -8,7 +8,6 @@
     <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1524180/RotationPlugin.js"></script>
     <script src="mraid.js"></script>
     <script>
-
         var bigSize = false, moveTayChoose, levelPlayer;
         var canvas, stage, screenSize, width, height, update = true;
         var supportsPassive = false, pressMove = false;
@@ -404,25 +403,19 @@
             var txtChoose = new createjs.Text("Choose level you want to play", "bold 30px Arial", "#f0e592");
             txtChoose.y = btnEasy.y + btnEasy.getBounds().height * btnEasy.scale + stage.canvas.height / 12
             txtChoose.scale = (stage.canvas.width * 2.5 / 3) / txtChoose.getMeasuredWidth();
-            txtChoose.x = (stage.canvas.width - txtChoose.getMeasuredWidth() * txtChoose.scale) / 2
+            txtChoose.x = (stage.canvas.width) / 2
+            txtChoose.textAlign = 'center';
 
             stage.addChild(icon, btnEasy, btnHard, btnMedium, txtChoose);
 
             var scaleTxt = txtChoose.scale
             createjs.Tween.get(txtChoose, { loop: 2 })
-                .to({
-                    scale: scaleTxt - 0.2,
-                    x: (stage.canvas.width - txtChoose.getMeasuredWidth() * (scaleTxt - 0.1)) / 2
-                }, 1000)
-                .to({
-                    scale: scaleTxt,
-                    x: (stage.canvas.width - txtChoose.getMeasuredWidth() * scaleTxt) / 2
-                }, 1000)
+                .to({ scale: scaleTxt - 0.2 }, 1000)
+                .to({ scale: scaleTxt }, 1000)
             setTimeout(function () {
                 createjs.Tween.get(txtChoose)
                     .to({
                         scale: scaleTxt - 0.2,
-                        x: (stage.canvas.width - txtChoose.getMeasuredWidth() * (scaleTxt - 0.1)) / 2,
                         alpha: 0,
                     }, 400)
             }, 4500);
@@ -597,6 +590,19 @@
                     break;
             }
         }
+
+        function addEvent() {
+            canvas.addEventListener("touchstart", onMouseDown, supportsPassive ? { passive: true } : false);
+            canvas.addEventListener("touchmove", onPressMove, supportsPassive ? { passive: true } : false);
+            canvas.addEventListener("touchend", onMouseUp, supportsPassive ? { passive: true } : false);
+            window.addEventListener('orientationchange', changeOrientation, supportsPassive ? { passive: true } : false);
+        }
+        function removeEvent() {
+            canvas.removeEventListener("touchstart", onMouseDown, supportsPassive ? { passive: true } : false);
+            canvas.removeEventListener("touchmove", onPressMove, supportsPassive ? { passive: true } : false);
+            canvas.removeEventListener("touchend", onMouseUp, supportsPassive ? { passive: true } : false);
+        }
+
         function changeOrientation() {
             screenSize = mraid.getScreenSize();
             width = screenSize.width;
@@ -617,32 +623,6 @@
                 game.bubble.currentHeight = Math.round((stage.canvas.width / 11) * 100) / 100;
                 game.bubble.scale = Math.round((stage.canvas.width / 11 / 50) * 100) / 100;
             }
-            var arrIndex = [];
-            for (let i = 0; i < game.map.length; i++) {
-                const row = game.map[i];
-                var arr = [];
-                var push = false;
-                var turn = true;
-                for (let j = 0; j < row.length; j++) {
-                    const item = row[j];
-                    if (turn) {
-                        if (item.color != null) {
-                            push = true;
-                            turn = false;
-                        };
-                    };
-                    arr.push(item.color != null ? item.color : -1);
-                }
-                if (push) arrIndex.push(arr);
-            };
-            game.indexBubbleInlocal = arrIndex;
-            game.map = setMap();
-            containerMain.removeAllChildren();
-            stage.removeAllChildren();
-            setBackground();
-            setDinosaursAndBird();
-            renderBubble();
-            setPlayer();
             if (win == false) {
                 clearInterval(emit1);
                 clearInterval(emit2);
@@ -654,19 +634,44 @@
                 setDinosaursAndBird();
                 setPlayer(2);
                 setStar();
+            } else if (fail == true) {
+                fail = false
+                stage.removeAllChildren();
+                setLose()
+            }
+            if (levelPlayer != null) {
+                var arrIndex = [];
+                for (let i = 0; i < game.map.length; i++) {
+                    const row = game.map[i];
+                    var arr = [];
+                    var push = false;
+                    var turn = true;
+                    for (let j = 0; j < row.length; j++) {
+                        const item = row[j];
+                        if (turn) {
+                            if (item.color != null) {
+                                push = true;
+                                turn = false;
+                            };
+                        };
+                        arr.push(item.color != null ? item.color : -1);
+                    }
+                    if (push) arrIndex.push(arr);
+                };
+                game.indexBubbleInlocal = arrIndex;
+                game.map = setMap();
+                containerMain.removeAllChildren();
+                stage.removeAllChildren();
+                setBackground();
+                setDinosaursAndBird();
+                renderBubble();
+                setPlayer();
+            } else {
+                stage.removeAllChildren();
+                setLevel()
             }
         }
-        function addEvent() {
-            canvas.addEventListener("touchstart", onMouseDown, supportsPassive ? { passive: true } : false);
-            canvas.addEventListener("touchmove", onPressMove, supportsPassive ? { passive: true } : false);
-            canvas.addEventListener("touchend", onMouseUp, supportsPassive ? { passive: true } : false);
-            window.addEventListener('orientationchange', changeOrientation, supportsPassive ? { passive: true } : false);
-        }
-        function removeEvent() {
-            canvas.removeEventListener("touchstart", onMouseDown, supportsPassive ? { passive: true } : false);
-            canvas.removeEventListener("touchmove", onPressMove, supportsPassive ? { passive: true } : false);
-            canvas.removeEventListener("touchend", onMouseUp, supportsPassive ? { passive: true } : false);
-        }
+
         function setStage() {
             canvas = document.getElementById("myCanvas");
             stage = new createjs.Stage(canvas);
@@ -1006,6 +1011,8 @@
                     }
                 }
             }
+            mapDuong = [];
+            mapAm = [];
             game.map.forEach((row) => {
                 if (row[0].y >= 0) mapDuong.push(row);
                 else if (row[0].y < 0) mapAm.push(row);
@@ -2139,8 +2146,8 @@
                 emit1 = setInterval(emitParticles, Math.random() * 700 + 300);
                 emit2 = setInterval(emitParticles, Math.random() * 700 + 300);
                 var colorarr = [];
-                
-                const mapEnd =  mapIndexD[levelPlayer]
+
+                const mapEnd = mapIndexD[levelPlayer]
                 for (let i = 0; i < mapEnd.length; i++) {
                     for (let j = 0; j < mapEnd[i].length; j++) {
                         if (colorarr.indexOf(mapEnd[i][j]) === -1 && mapEnd[i][j] != 100 && mapEnd[i][j] >= 0 && mapEnd[i][j] <= 7) {
