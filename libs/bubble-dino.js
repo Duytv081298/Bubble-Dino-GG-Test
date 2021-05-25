@@ -227,7 +227,7 @@ function setAnimation() {
             [862, 636, 34, 33, 0, -5, -16],
             [892, 671, 33, 32, 0, -11, -11]
         ],
-        
+
         animations: {
             bg_sakura: { frames: [0] },
             bg_original: { frames: [1] },
@@ -445,7 +445,7 @@ function startLevel(level) {
 
     game.indexBubbleInlocal = mapIndexD;
     game.map = setMap();
-    
+
     switch (level) {
         case 1:
             var bg = new createjs.Sprite(spriteSheet, "bg_original");
@@ -833,53 +833,39 @@ function setPlayer(color) {
 function updateColor() {
     var arColor = [];
     player.color = [];
+
     var itemEnd = getItemEnd();
-    var y;
-    if (itemEnd.item) {
-        loop1:
-        for (let i = mapDuong.length - 1; i >= (itemEnd.y - 4 <= 0 ? 0 : itemEnd.y - 4); i--) {
-            var lengthI = mapDuong[i].length;
-            loop2:
-            for (let j = 0; j < mapDuong[i].length; j++) {
-                if (mapDuong[i][j].existing == true) lengthI -= 1;
-                if (j == mapDuong[i].length - 1 && lengthI == 0) {
-                    y = i;
-                    break loop1;
-                };
-            };
-        };
-    }
-    if (y) {
-        mapDuong[y].forEach(item => {
-            if (item.color < 20 && item.color != 7 && item.color != 8) item.color >= 10 ? arColor.push(item.color - 10) : arColor.push(item.color);
-        });
+    console.log(itemEnd);
+    if (itemEnd.y != 0) {
+        for (let i = 0; i <= 11; i++) {
+            loop1:
+            for (let row = itemEnd.y; row >= 0; row--) {
+                var item = mapDuong[row][i]
+                if (item) {
+                    if (item.color != null && item.color < 20 && item.color != 7 && item.color != 8) {
+                        if (item.color >= 10) {
+                            arColor.push(item.color - 10);
+                            break loop1;
+                        } else {
+                            arColor.push(item.color);
+                            break loop1;
+                        };
+                    };
+                }
+            }
+        }
     } else {
-        if (itemEnd.y > 3) {
-            for (let row = itemEnd.y; row >= itemEnd.y - 3; row--) {
-                for (let i = 0; i < mapDuong[row].length; i++) {
-                    if (mapDuong[row][i].color != null && mapDuong[row][i].color < 20 && mapDuong[row][i].color != 7 && mapDuong[row][i].color != 8) {
-                        if (mapDuong[row][i].color >= 10) {
-                            arColor.push(mapDuong[row][i].color - 10);
-                        } else {
-                            arColor.push(mapDuong[row][i].color);
-                        };
-                    };
+        for (let i = 0; i < mapDuong[0].length; i++) {
+            const element = mapDuong[0][i];
+            if (item.color != null && item.color < 20 && item.color != 7 && item.color != 8) {
+                if (item.color >= 10) {
+                    arColor.push(item.color - 10);
+                } else {
+                    arColor.push(item.color);
                 };
             };
-        } else {
-            for (let row = 0; row <= itemEnd.y; row++) {
-                for (let i = 0; i < mapDuong[row].length; i++) {
-                    if (mapDuong[row][i].color != null && mapDuong[row][i].color < 20 && mapDuong[row][i].color != 7 && mapDuong[row][i].color != 8) {
-                        if (mapDuong[row][i].color >= 10) {
-                            arColor.push(mapDuong[row][i].color - 10);
-                        } else {
-                            arColor.push(mapDuong[row][i].color);
-                        };
-                    };
-                };
-            };
-        };
-    };
+        }
+    }
     player.color = arColor;
     if (player.color.length == 0) player.color.push(1);
 }
