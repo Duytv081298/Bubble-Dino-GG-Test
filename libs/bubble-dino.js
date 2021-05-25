@@ -8,7 +8,7 @@ var height = window.innerHeight
     || document.documentElement.clientHeight
     || document.body.clientHeight;
 width = isMobile ? width : height / 1.7;
-var bigSize = false, moveTayChoose;
+var moveTayChoose;
 var canvas, stage, context, update = true;
 var supportsPassive = false, pressMove = false;
 var containerLine = new createjs.Container();
@@ -27,7 +27,7 @@ var queue, game = {
         color: null
     },
     scores: 0,
-    total_score: 0
+    total_score: 38
 };
 var mapAm = [], mapDuong = [], rowDuong;
 var player = {
@@ -44,8 +44,8 @@ var destinations = [], bubbleRemove = [], iceBuble = [];
 var textNew, containerPoint, text_scores, avatar, downtime = 0, tay;
 var containerMain = new createjs.Container();
 var spriteSheet;
-var win = true, fail = false, life = 0, textLife;
-const mapIndexD = [
+var win = true, fail = false, life = 20, textLife;
+const mapIndexD =
     [[100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
     [16, 6, 16, 6, 16, 6, 14, 4, 14, 4, 14],
     [6, 6, 6, 16, 6, 4, 14, 4, 4, 4],
@@ -66,58 +66,7 @@ const mapIndexD = [
     [1, 4, 13, 3, 7, 11, 7, 3, 3, 4, 1],
     [1, 4, 3, 3, 7, 7, 3, 13, 4, 1],
     [1, 11, 1, 1, 3, 13, 3, 1, 1, 11, 1],
-    [1, 1, 1, 11, 1, 1, 11, 1, 1, 1]
-    ],
-
-    [[100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
-    [4, 14, 4, 14, 4, 3, 4, 14, 4, 14, 4],
-    [4, 4, 2, 2, 3, 3, 2, 2, 4, 4],
-    [4, 2, 2, 2, 2, 3, 2, 2, 2, 2, 4],
-    [2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-    [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-    [2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-    [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-    [2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-    [4, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4],
-    [4, 2, 2, 2, 2, 2, 2, 2, 2, 4],
-    [4, 14, 4, 14, 4, 4, 4, 14, 4, 14, 4],
-    [4, 4, 4, 4, 14, 14, 4, 4, 4, 4],
-    [6, 16, 2, 2, 2, 2, 3, 3, 6, 16, 6],
-    [6, 2, 2, 2, 2, 2, 2, 3, 6, 6],
-    [16, 2, 2, 2, 2, 2, 2, 2, 6, 6, 6],
-    [6, 2, 2, 2, 2, 2, 2, 6, 6, 16],
-    [6, 16, 2, 2, 2, 2, 2, 16, 1, 1, 6],
-    [6, 6, 2, 2, 2, 2, 6, 6, 1, 6],
-    [6, 16, 6, 16, 6, 6, 6, 16, 6, 16, 6],
-    [3, 3, 13, 3, 3, 3, 3, 13, 3, 3],
-    [3, 13, 3, 3, 3, 1, 3, 3, 3, 13, 3],
-    [3, 3, 13, 3, 1, 1, 3, 13, 3, 3],
-    [3, 3, 3, 2, 2, 1, 2, 2, 3, 3, 3],
-    [13, 3, 2, 2, 2, 2, 2, 2, 3, 13],
-    [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-    [2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-    [3, 3, 2, 2, 2, 2, 2, 2, 2, 3, 3],
-    [13, 3, 2, 2, 2, 2, 2, 2, 3, 13],
-    [3, 3, 13, 2, 2, 2, 2, 2, 13, 3, 3],
-    [12, 12, 12, 12, 12, 12, 12, 12, 12, 12]],
-
-    [[100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
-    [0, 0, 0, 0, 2, 2, 2, 3, 3, 3, 3, 6, 5, 5, 5, 5, 3, 3, 3],
-    [0, 0, 0, 2, 2, 2, 3, 3, 3, 3, 5, 6, 5, 5, 5, 5, 3, 3],
-    [0, 0, 0, 2, 2, 2, 5, 5, 3, 3, 6, 6, 6, 5, 6, 5, 6, 3, 3],
-    [0, 0, 2, 2, 5, 5, 3, 3, 3, 4, 6, 2, 2, 5, 6, 6, 6, 3],
-    [0, 0, 0, 5, 5, 5, 3, 3, 3, 4, 4, 2, 2, 2, 6, 6, 6, 3, 3],
-    [6, 6, 6, 6, 5, 5, 3, 3, 3, 4, 4, 2, 2, 2, 6, 6, 6, 4],
-    [6, 6, 6, 6, 2, 5, 5, 4, 4, 4, 4, 4, 2, 2, 2, 4, 4, 4, 4],
-    [6, 6, 6, 6, 2, 5, 4, 4, 4, 4, 2, 3, 2, 2, 4, 4, 4, 4],
-    [6, 6, 6, 2, 2, 2, 2, 2, 6, 6, 3, 3, 3, 6, 4, 4, 4, 4, 4],
-    [5, 5, 2, 2, 5, 5, 2, 2, 6, 3, 3, 3, 3, 6, 6, 6, 4, 4],
-    [5, 5, 2, 2, 5, 5, 2, 2, 3, 3, 3, 3, 3, 6, 6, 6, 6, 6, 6],
-    [6, 6, 6, -1, -1, -1, -1, 5, 5, 5, 5, 5, 5, 4, 4, 4, 3, 3],
-    [6, 6, 6, 6, 0, -1, -1, 0, 3, 2, 5, 5, 5, 5, 4, 4, 3, 3, 3],
-    [3, 6, 6, 5, -1, -1, 6, -1, 0, 5, -1, 5, 5, 4, 4, 3, 3, 3],
-    [6, 6, 6, 6, 0, -1, -1, 0, -1, -1, -1, 6, 0, -1, 6, 6, 0, 4, -1]],
-];
+    [1, 1, 1, 11, 1, 1, 11, 1, 1, 1]];
 async function gameinit() {
     createjs.RotationPlugin.install();
     createjs.MotionGuidePlugin.install();
@@ -139,219 +88,187 @@ function setAnimation() {
         images: [queue.getResult("bubble_full")],
         framerate: 25,
         frames: [
-            [1, 1, 300, 533, 0, 0, 0],
-            [1, 536, 270, 270, 0, 0, 0],
-            [1, 808, 295, 14, 0, -3, -3],
-            [303, 1, 124, 152, 0, 0, 0],
-            [1, 824, 195, 75, 0, 0, 0],
-            [303, 155, 77, 106, 0, 0, -3],
-            [429, 1, 68, 56, 0, -9, -18],
-            [429, 59, 68, 56, 0, -10, -18],
-            [429, 117, 68, 56, 0, -10, -18],
-            [1, 901, 88, 61, 0, -2, -18],
-            [198, 824, 88, 61, 0, -2, -18],
-            [1, 964, 87, 61, 0, -3, -18],
-            [91, 901, 87, 61, 0, -3, -18],
-            [1, 1027, 87, 61, 0, -3, -18],
-            [90, 964, 86, 61, 0, -1, -16],
-            [1, 1090, 86, 61, 0, -1, -16],
-            [90, 1027, 86, 61, 0, -1, -16],
-            [1, 1153, 86, 61, 0, -1, -16],
-            [89, 1090, 85, 61, 0, -1, -16],
-            [303, 263, 77, 59, 0, -8, -21],
-            [1, 1216, 80, 56, 0, -7, -23],
-            [89, 1153, 77, 59, 0, -7, -21],
-            [303, 324, 77, 59, 0, -8, -21],
-            [1, 1274, 77, 59, 0, -8, -21],
-            [303, 385, 77, 59, 0, -8, -21],
-            [1, 1335, 79, 56, 0, -8, -23],
-            [1, 1393, 53, 52, 0, 0, 0],
-            [303, 446, 79, 56, 0, -8, -23],
-            [382, 155, 45, 53, 0, -5, -1],
-            [303, 504, 100, 32, 0, 0, -2],
-            [273, 538, 109, 38, 0, -1, 0],
-            [273, 578, 100, 38, 0, 0, -4],
-            [273, 618, 79, 56, 0, -8, -23],
-            [273, 676, 79, 56, 0, -8, -23],
-            [273, 734, 71, 59, 0, -8, -16],
-            [382, 210, 66, 61, 0, -10, -14],
-            [382, 273, 66, 60, 0, -10, -15],
-            [382, 335, 66, 60, 0, -10, -15],
-            [382, 397, 97, 35, 0, -1, 0],
-            [384, 434, 71, 59, 0, -9, -16],
-            [198, 887, 100, 32, 0, 0, -2],
-            [180, 921, 100, 32, 0, 0, -2],
-            [457, 434, 40, 38, 0, -7, -8],
-            [457, 474, 40, 38, 0, -7, -8],
-            [405, 495, 50, 51, 0, -3, -2],
-            [457, 514, 40, 38, 0, -7, -8],
-            [450, 175, 47, 42, 0, -7, -5],
-            [450, 219, 47, 42, 0, -7, -5],
-            [450, 263, 47, 42, 0, -7, -5],
-            [450, 307, 47, 42, 0, -7, -5],
-            [450, 351, 47, 42, 0, -7, -5],
-            [384, 548, 71, 59, 0, -9, -16],
-            [457, 554, 40, 38, 0, -7, -8],
-            [457, 594, 40, 38, 0, -7, -8],
-            [180, 955, 72, 55, 0, -10, -22],
-            [178, 1012, 70, 59, 0, -9, -16],
-            [178, 1073, 70, 58, 0, -9, -16],
-            [176, 1133, 72, 55, 0, -10, -22],
-            [168, 1190, 72, 55, 0, -10, -22],
-            [254, 955, 55, 55, 0, 0, 0],
-            [250, 1012, 65, 60, 0, -10, -15],
-            [250, 1074, 65, 60, 0, -11, -15],
-            [250, 1136, 67, 56, 0, -10, -18],
-            [242, 1194, 72, 55, 0, -10, -22],
-            [354, 618, 70, 59, 0, -9, -16],
-            [354, 679, 72, 55, 0, -10, -22],
-            [346, 736, 55, 55, 0, 0, 0],
-            [403, 736, 55, 55, 0, 0, 0],
-            [460, 634, 37, 50, 0, 0, 0],
-            [428, 686, 60, 48, 0, 0, 0],
-            [282, 921, 34, 32, 0, -10, -11],
-            [56, 1393, 51, 51, 0, -2, -2],
-            [460, 736, 36, 45, 0, -12, -5],
-            [311, 955, 55, 55, 0, 0, 0],
-            [317, 1012, 55, 55, 0, 0, 0],
-            [317, 1069, 55, 55, 0, 0, 0],
-            [319, 1126, 55, 55, 0, 0, 0],
-            [319, 1183, 55, 27, 0, 0, 0],
-            [316, 1212, 53, 53, 0, -1, -2],
-            [426, 634, 32, 30, 0, -11, -12],
-            [288, 824, 51, 53, 0, -2, -2],
-            [300, 879, 45, 40, 0, -8, -6],
-            [318, 921, 36, 32, 0, -7, -10],
-            [426, 609, 22, 23, 0, -16, -15],
-            [83, 1216, 53, 53, 0, -1, -2],
-            [138, 1214, 27, 32, 0, -16, -11],
-            [371, 1212, 53, 53, 0, -1, -2],
-            [80, 1274, 51, 53, 0, -2, -2],
-            [82, 1329, 53, 53, 0, -1, -2],
-            [109, 1384, 53, 53, 0, -1, -2],
-            [133, 1271, 50, 51, 0, -2, -2],
-            [137, 1324, 50, 50, 0, -2, -2],
-            [185, 1247, 51, 50, 0, -2, -2],
-            [238, 1251, 51, 50, 0, -2, -2],
-            [138, 1248, 23, 21, 0, -16, -15],
-            [189, 1299, 47, 42, 0, -7, -5],
-            [238, 1303, 51, 50, 0, -2, -2],
-            [189, 1343, 46, 47, 0, -4, -4],
-            [237, 1355, 51, 50, 0, -2, -2],
-            [291, 1267, 51, 50, 0, -2, -2],
-            [344, 1267, 51, 50, 0, -2, -2],
-            [291, 1319, 48, 42, 0, -6, -5],
-            [341, 1319, 48, 44, 0, 0, -5],
-            [290, 1363, 44, 40, 0, -2, -6],
-            [336, 1365, 43, 38, 0, -7, -17],
-            [164, 1407, 41, 38, 0, -10, -7],
-            [207, 1407, 41, 38, 0, -10, -7],
-            [250, 1407, 41, 38, 0, -10, -7],
-            [293, 1405, 41, 38, 0, -10, -7],
-            [336, 1405, 41, 38, 0, -10, -7],
-            [397, 1267, 34, 41, 0, -13, -7],
-            [381, 1365, 39, 38, 0, -8, -8],
-            [379, 1405, 41, 38, 0, -10, -7],
-            [460, 783, 36, 36, 0, -9, -10],
-            [426, 793, 32, 30, 0, -11, -12],
-            [428, 666, 18, 18, 0, -19, -16],
-            [391, 1319, 39, 38, 0, -8, -8],
-            [346, 793, 41, 37, 0, -8, -17],
-            [389, 793, 35, 35, 0, -10, -10],
-            [341, 832, 39, 37, 0, -8, -8],
-            [347, 871, 36, 36, 0, -9, -9],
-            [356, 909, 30, 37, 0, -15, -9],
-            [368, 948, 36, 36, 0, -9, -9],
-            [382, 832, 36, 36, 0, -9, -10],
-            [385, 870, 36, 36, 0, -9, -9],
-            [388, 908, 36, 36, 0, -9, -10],
-            [406, 946, 36, 36, 0, -9, -9],
-            [374, 986, 36, 36, 0, -9, -10],
-            [374, 1024, 36, 36, 0, -9, -9],
-            [374, 1062, 36, 36, 0, -9, -10],
-            [412, 984, 36, 36, 0, -9, -9],
-            [412, 1022, 40, 36, 0, -5, -8],
-            [412, 1060, 40, 36, 0, -10, -16],
-            [376, 1100, 36, 35, 0, -9, -11],
-            [376, 1137, 36, 35, 0, -9, -10],
-            [376, 1174, 36, 35, 0, -12, -9],
-            [414, 1098, 35, 35, 0, -10, -10],
-            [414, 1135, 35, 35, 0, -10, -10],
-            [414, 1172, 35, 35, 0, -10, -10],
-            [426, 1209, 35, 35, 0, -10, -10],
-            [463, 821, 34, 33, 0, -5, -16],
-            [426, 825, 35, 34, 0, -13, -10],
-            [463, 856, 34, 32, 0, -10, -11],
-            [463, 890, 34, 32, 0, -10, -11],
-            [426, 861, 35, 35, 0, -10, -10],
-            [426, 898, 35, 34, 0, -13, -10],
-            [463, 924, 34, 32, 0, -10, -11],
-            [463, 958, 34, 32, 0, -10, -11],
-            [463, 992, 34, 32, 0, -10, -11],
-            [463, 1026, 34, 32, 0, -10, -11],
-            [463, 1060, 34, 32, 0, -10, -11],
-            [463, 1094, 34, 32, 0, -10, -11],
-            [463, 1128, 34, 32, 0, -10, -11],
-            [451, 1162, 35, 34, 0, -13, -10],
-            [463, 1198, 33, 32, 0, -11, -11],
-            [463, 1232, 33, 31, 0, -11, -11],
-            [298, 795, 27, 25, 0, -13, -13],
-            [433, 1265, 35, 34, 0, -13, -10],
-            [470, 1265, 25, 28, 0, -16, -13],
-            [433, 1301, 35, 34, 0, -13, -10],
-            [432, 1337, 35, 34, 0, -13, -10],
-            [422, 1373, 33, 29, 0, -5, -19],
-            [422, 1404, 32, 29, 0, -10, -11]
+            [1, 1, 280, 503, 0, 0, 0],
+            [283, 1, 280, 490, 0, 0, 0],
+            [565, 1, 295, 14, 0, -3, -3],
+            [1, 506, 150, 150, 0, 0, 0],
+            [565, 17, 124, 152, 0, 0, 0],
+            [153, 506, 77, 106, 0, 0, -3],
+            [1, 658, 88, 61, 0, -2, -18],
+            [565, 171, 88, 61, 0, -2, -18],
+            [691, 17, 87, 61, 0, -3, -18],
+            [565, 234, 87, 61, 0, -3, -18],
+            [691, 80, 87, 61, 0, -3, -18],
+            [565, 297, 86, 61, 0, -1, -16],
+            [565, 360, 86, 61, 0, -1, -16],
+            [565, 423, 86, 61, 0, -1, -16],
+            [780, 17, 85, 61, 0, -1, -16],
+            [780, 80, 86, 61, 0, -1, -16],
+            [868, 1, 109, 38, 0, -1, 0],
+            [867, 41, 100, 33, 0, 0, 0],
+            [868, 76, 77, 59, 0, -8, -21],
+            [691, 143, 100, 33, 0, 0, 0],
+            [91, 658, 66, 61, 0, -10, -14],
+            [153, 614, 97, 35, 0, -1, 0],
+            [159, 651, 80, 56, 0, -7, -23],
+            [283, 493, 100, 33, 0, 0, 0],
+            [385, 493, 79, 56, 0, -8, -23],
+            [466, 493, 79, 56, 0, -8, -23],
+            [793, 143, 77, 59, 0, -7, -21],
+            [872, 137, 77, 59, 0, -8, -21],
+            [232, 506, 45, 53, 0, -5, -1],
+            [232, 561, 50, 51, 0, -3, -2],
+            [284, 528, 77, 59, 0, -8, -21],
+            [284, 589, 79, 56, 0, -8, -23],
+            [252, 614, 30, 37, 0, -15, -9],
+            [655, 178, 79, 56, 0, -8, -23],
+            [736, 178, 55, 55, 0, 0, 0],
+            [654, 236, 77, 59, 0, -8, -21],
+            [653, 297, 71, 59, 0, -8, -16],
+            [653, 358, 71, 59, 0, -9, -16],
+            [653, 419, 71, 59, 0, -9, -16],
+            [793, 204, 72, 55, 0, -10, -22],
+            [241, 653, 55, 55, 0, 0, 0],
+            [298, 647, 65, 60, 0, -10, -15],
+            [159, 709, 36, 32, 0, -7, -10],
+            [197, 709, 34, 32, 0, -10, -11],
+            [736, 235, 55, 55, 0, 0, 0],
+            [793, 261, 72, 55, 0, -10, -22],
+            [726, 297, 65, 60, 0, -11, -15],
+            [726, 359, 66, 60, 0, -10, -15],
+            [726, 421, 70, 58, 0, -9, -16],
+            [794, 318, 70, 59, 0, -9, -16],
+            [794, 379, 45, 40, 0, -8, -6],
+            [798, 421, 66, 60, 0, -10, -15],
+            [841, 379, 44, 40, 0, -2, -6],
+            [866, 318, 70, 59, 0, -9, -16],
+            [887, 379, 53, 52, 0, 0, 0],
+            [866, 433, 72, 55, 0, -10, -22],
+            [940, 433, 37, 50, 0, 0, 0],
+            [565, 486, 72, 55, 0, -10, -22],
+            [872, 198, 72, 55, 0, -10, -22],
+            [867, 255, 68, 56, 0, -9, -18],
+            [937, 255, 40, 38, 0, -7, -8],
+            [938, 295, 39, 38, 0, -8, -8],
+            [938, 335, 39, 38, 0, -8, -8],
+            [942, 375, 35, 35, 0, -10, -10],
+            [233, 710, 55, 27, 0, 0, 0],
+            [653, 480, 68, 56, 0, -10, -18],
+            [723, 481, 68, 56, 0, -10, -18],
+            [793, 483, 67, 56, 0, -10, -18],
+            [862, 490, 60, 48, 0, 0, 0],
+            [924, 490, 53, 53, 0, -1, -2],
+            [298, 709, 34, 32, 0, -10, -11],
+            [334, 709, 34, 32, 0, -10, -11],
+            [363, 551, 40, 36, 0, -5, -8],
+            [365, 589, 55, 55, 0, 0, 0],
+            [365, 646, 55, 55, 0, 0, 0],
+            [370, 703, 43, 38, 0, -7, -17],
+            [405, 551, 40, 36, 0, -10, -16],
+            [447, 551, 53, 53, 0, -1, -2],
+            [502, 551, 51, 53, 0, -2, -2],
+            [555, 543, 53, 53, 0, -1, -2],
+            [415, 703, 41, 38, 0, -10, -7],
+            [422, 606, 53, 53, 0, -1, -2],
+            [477, 606, 51, 51, 0, -2, -2],
+            [422, 661, 41, 38, 0, -10, -7],
+            [610, 543, 50, 51, 0, -2, -2],
+            [662, 538, 51, 50, 0, -2, -2],
+            [715, 539, 51, 50, 0, -2, -2],
+            [768, 541, 51, 50, 0, -2, -2],
+            [821, 541, 51, 50, 0, -2, -2],
+            [874, 540, 48, 44, 0, 0, -5],
+            [924, 545, 51, 50, 0, -2, -2],
+            [530, 606, 46, 47, 0, -4, -4],
+            [578, 598, 36, 45, 0, -12, -5],
+            [616, 596, 47, 42, 0, -7, -5],
+            [665, 590, 48, 42, 0, -6, -5],
+            [715, 591, 47, 42, 0, -7, -5],
+            [764, 593, 47, 42, 0, -7, -5],
+            [813, 593, 47, 42, 0, -7, -5],
+            [947, 76, 27, 32, 0, -16, -11],
+            [947, 110, 27, 25, 0, -13, -13],
+            [951, 137, 25, 28, 0, -16, -13],
+            [862, 593, 34, 41, 0, -13, -7],
+            [898, 597, 41, 38, 0, -10, -7],
+            [941, 597, 36, 36, 0, -9, -9],
+            [941, 635, 36, 36, 0, -9, -10],
+            [465, 661, 40, 38, 0, -7, -8],
+            [458, 701, 41, 38, 0, -10, -7],
+            [507, 659, 40, 38, 0, -7, -8],
+            [549, 655, 39, 37, 0, -8, -8],
+            [590, 645, 41, 37, 0, -8, -17],
+            [633, 640, 36, 36, 0, -9, -9],
+            [671, 634, 36, 36, 0, -9, -10],
+            [709, 635, 36, 35, 0, -9, -11],
+            [747, 637, 36, 36, 0, -9, -9],
+            [785, 637, 36, 36, 0, -9, -10],
+            [823, 637, 36, 36, 0, -9, -9],
+            [951, 167, 22, 23, 0, -16, -15],
+            [590, 684, 36, 35, 0, -9, -10],
+            [633, 678, 36, 35, 0, -12, -9],
+            [671, 672, 35, 35, 0, -10, -10],
+            [671, 709, 34, 32, 0, -10, -11],
+            [708, 672, 35, 35, 0, -10, -10],
+            [707, 709, 34, 32, 0, -10, -11],
+            [743, 709, 34, 32, 0, -10, -11],
+            [745, 675, 34, 32, 0, -10, -11],
+            [781, 675, 35, 34, 0, -13, -10],
+            [779, 711, 32, 30, 0, -11, -12],
+            [818, 675, 35, 34, 0, -13, -10],
+            [813, 711, 32, 30, 0, -11, -12],
+            [501, 701, 35, 35, 0, -10, -10],
+            [538, 699, 35, 34, 0, -13, -10],
+            [855, 675, 35, 34, 0, -13, -10],
+            [847, 711, 33, 29, 0, -5, -19],
+            [882, 711, 32, 29, 0, -10, -11],
+            [916, 637, 23, 21, 0, -16, -15],
+            [1, 721, 18, 18, 0, -19, -16],
+            [862, 636, 34, 33, 0, -5, -16],
+            [892, 671, 33, 32, 0, -11, -11]
         ],
-
+        
         animations: {
-            bg1: { frames: [0] },
-            icon: { frames: [1] },
+            bg_sakura: { frames: [0] },
+            bg_original: { frames: [1] },
             tut: { frames: [2] },
-            body_dino: { frames: [3] },
-            failed: { frames: [4] },
+            icon: { frames: [3] },
+            body_dino: { frames: [4] },
             owl: { frames: [5] },
-            out_yellow: { frames: [60, 6, 34, 18, 11, 21, 25, 57] },
-            out_green: { frames: [61, 7, 39, 15, 12, 22, 27, 58] },
-            out_cyan: { frames: [37, 8, 64, 17, 10, 24, 33, 65] },
-            out_red: { frames: [35, 56, 55, 14, 9, 19, 20, 54] },
-            out_pink: { frames: [36, 62, 51, 16, 13, 23, 32, 63] },
-            CircleLight: { frames: [26] },
+            out_red: { frames: [20, 48, 49, 11, 6, 18, 22, 39] },
+            out_cyan: { frames: [51, 66, 53, 15, 7, 35, 33, 58] },
+            out_yellow: { frames: [41, 59, 36, 14, 8, 26, 24, 45] },
+            out_green: { frames: [46, 65, 37, 12, 9, 27, 25, 55] },
+            out_pink: { frames: [47, 67, 38, 13, 10, 30, 31, 57] },
+            play_now: { frames: [16] },
+            btn_black: { frames: [17] },
+            btn_original: { frames: [19] },
+            install_now: { frames: [21] },
+            btn_sakura: { frames: [23] },
             tay: { frames: [28] },
-            btnEasy: { frames: [29] },
-            play_now: { frames: [30] },
-            btn_again: { frames: [31] },
-            install_now: { frames: [38] },
-            btnHard: { frames: [40] },
-            btnMedium: { frames: [41] },
-            explosive_blue: { frames: [70, 120, 42, 142, 59, 113, 141, 105, 46, 118] },
-            explosive_red: { frames: [143, 122, 43, 146, 66, 133, 145, 106, 47, 136] },
-            B_Clarity: { frames: [44] },
-            explosive_yellow: { frames: [79, 124, 45, 147, 67, 123, 153, 107, 48, 137] },
-            explosive_green: { frames: [148, 126, 111, 149, 73, 125, 157, 108, 49, 138] },
-            explosive_pink: { frames: [150, 128, 116, 151, 74, 127, 159, 109, 50, 139] },
-            explosive_purple: { frames: [155, 130, 52, 152, 75, 129, 160, 112, 95, 144] },
-            explosive_cyan: { frames: [114, 119, 53, 154, 76, 134, 135, 81, 101, 161] },
-            hand_dino: { frames: [68] },
-            avatar: { frames: [69] },
-            B_Ice: { frames: [71] },
-            explosive_ice: { frames: [83, 158, 85, 121, 110, 72, 132, 117, 104, 140] },
-            topbar: { frames: [77] },
-            B_Blue: { frames: [78] },
-            B_Cyan: { frames: [80] },
-            explosive_clarity: { frames: [115, 94, 156, 162, 82, 131, 103, 102, 97, 90] },
-            B_Green: { frames: [84] },
-            B_Pink: { frames: [86] },
-            B_Purple: { frames: [87] },
-            B_Red: { frames: [88] },
-            B_Yellow: { frames: [89] },
-            in_blue: { frames: [91] },
-            in_cyan: { frames: [92] },
-            in_green: { frames: [93] },
-            in_pink: { frames: [96] },
-            in_purple: { frames: [98] },
-            in_red: { frames: [99] },
-            in_yellow: { frames: [100] }
+            B_Clarity: { frames: [29] },
+            explosive_ice: { frames: [116, 100, 98, 32, 101, 92, 76, 109, 75, 136] },
+            explosive_red: { frames: [43, 103, 60, 70, 34, 112, 125, 80, 93, 63] },
+            explosive_yellow: { frames: [126, 110, 105, 71, 40, 104, 127, 83, 95, 119] },
+            explosive_clarity: { frames: [135, 134, 99, 133, 42, 72, 52, 89, 91, 84] },
+            explosive_green: { frames: [120, 113, 61, 122, 44, 111, 130, 102, 96, 121] },
+            explosive_cyan: { frames: [128, 108, 107, 137, 74, 117, 118, 50, 94, 132] },
+            CircleLight: { frames: [54] },
+            hand_dino: { frames: [56] },
+            explosive_pink: { frames: [123, 115, 62, 124, 73, 114, 131, 106, 97, 129] },
+            topbar: { frames: [64] },
+            avatar: { frames: [68] },
+            B_Green: { frames: [69] },
+            B_Pink: { frames: [77] },
+            B_Cyan: { frames: [78] },
+            B_Red: { frames: [79] },
+            B_Yellow: { frames: [81] },
+            B_Ice: { frames: [82] },
+            in_cyan: { frames: [85] },
+            in_green: { frames: [86] },
+            in_pink: { frames: [87] },
+            in_red: { frames: [88] },
+            in_yellow: { frames: [90] }
         }
     });
     setLevel()
@@ -363,9 +280,9 @@ function setLevel() {
     icon.x = (stage.canvas.width - icon.getBounds().width * icon.scale) / 2
     icon.y = (stage.canvas.height / 10)
 
-    var btnEasy = new createjs.Sprite(spriteSheet, "btnEasy");
-    var btnHard = new createjs.Sprite(spriteSheet, "btnHard");
-    var btnMedium = new createjs.Sprite(spriteSheet, "btnMedium");
+    var btnEasy = new createjs.Sprite(spriteSheet, "btn_black");
+    var btnHard = new createjs.Sprite(spriteSheet, "btn_sakura");
+    var btnMedium = new createjs.Sprite(spriteSheet, "btn_original");
 
     btnEasy.scale = btnHard.scale = btnMedium.scale = (stage.canvas.width / 3.5) / btnEasy.getBounds().width;
     btnEasy.y = btnMedium.y = btnHard.y = icon.y + icon.getBounds().height * icon.scale + stage.canvas.height / 12
@@ -376,30 +293,18 @@ function setLevel() {
     btnMedium.addEventListener("click", () => { clickButton(btnMedium, 1) }, false);
     btnHard.addEventListener("click", () => { clickButton(btnHard, 2) }, false);
 
-    var txtChoose = new createjs.Text("Choose level you want to play", "bold 30px Arial", "#f0e592");
+    var txtChoose = new createjs.Text("Choose your favorite theme", "bold 30px Arial", "#f0e592");
     txtChoose.y = btnEasy.y + btnEasy.getBounds().height * btnEasy.scale + stage.canvas.height / 12
-    txtChoose.scale = (stage.canvas.width * 2.5 / 3) / txtChoose.getMeasuredWidth();
-    txtChoose.x = (stage.canvas.width - txtChoose.getMeasuredWidth() * txtChoose.scale) / 2
-
+    txtChoose.scale = (stage.canvas.width * 2.5) / 3 / txtChoose.getMeasuredWidth();
+    txtChoose.x = stage.canvas.width / 2;
+    txtChoose.textAlign = "center";
     stage.addChild(icon, btnEasy, btnHard, btnMedium, txtChoose);
-
-    var scaleTxt = txtChoose.scale
+    var scaleTxt = txtChoose.scale;
     createjs.Tween.get(txtChoose, { loop: 2 })
-        .to({
-            scale: scaleTxt - 0.2,
-            x: (stage.canvas.width - txtChoose.getMeasuredWidth() * (scaleTxt - 0.1)) / 2
-        }, 1000)
-        .to({
-            scale: scaleTxt,
-            x: (stage.canvas.width - txtChoose.getMeasuredWidth() * scaleTxt) / 2
-        }, 1000)
+        .to({ scale: scaleTxt - 0.2 }, 1000)
+        .to({ scale: scaleTxt }, 1000);
     setTimeout(function () {
-        createjs.Tween.get(txtChoose)
-            .to({
-                scale: scaleTxt - 0.2,
-                x: (stage.canvas.width - txtChoose.getMeasuredWidth() * (scaleTxt - 0.1)) / 2,
-                alpha: 0,
-            }, 400)
+        createjs.Tween.get(txtChoose).to({ scale: scaleTxt - 0.2, alpha: 0 }, 400);
     }, 4500);
     var handChoose = new createjs.Sprite(spriteSheet, "tay");
     handChoose.scale = (stage.canvas.width / 10) / handChoose.getBounds().width
@@ -420,7 +325,6 @@ function setLevel() {
     var indexXTemp = 1;
     animation()
     moveTayChoose = setInterval(animation, 1300);
-
     function animation() {
         tayDefault()
         btnEasyDefault()
@@ -534,42 +438,33 @@ function setLevel() {
 function startLevel(level) {
     clearInterval(moveTayChoose);
     stage.removeAllChildren();
-    if (level == 2) {
-        bigSize = true
-        game.bubble.currentWidth = Math.round((stage.canvas.width / 19) * 100) / 100;
-        game.bubble.currentHeight = Math.round((stage.canvas.width / 19) * 100) / 100;
-        game.bubble.scale = Math.round((stage.canvas.width / 19 / 50) * 100) / 100;
-    } else {
-        game.bubble.currentWidth = Math.round((stage.canvas.width / 11) * 100) / 100;
-        game.bubble.currentHeight = Math.round((stage.canvas.width / 11) * 100) / 100;
-        game.bubble.scale = Math.round((stage.canvas.width / 11 / 50) * 100) / 100;
-    }
-    game.indexBubbleInlocal = mapIndexD[level];
+
+    game.bubble.currentWidth = Math.round((stage.canvas.width / 11) * 100) / 100;
+    game.bubble.currentHeight = Math.round((stage.canvas.width / 11) * 100) / 100;
+    game.bubble.scale = Math.round((stage.canvas.width / 11 / 50) * 100) / 100;
+
+    game.indexBubbleInlocal = mapIndexD;
     game.map = setMap();
+    
     switch (level) {
-        case 0:
-            game.total_score = 38;
-            life = 20;
-            setDinosaursAndBird();
-            renderBubble();
-            setPlayer(1);
-            break;
         case 1:
-            game.total_score = 42;
-            life = 20;
-            setDinosaursAndBird();
-            setPlayer(2);
-            renderBubble();
+            var bg = new createjs.Sprite(spriteSheet, "bg_original");
+            bg.scaleX = stage.canvas.width / bg.getBounds().width;
+            bg.scaleY = stage.canvas.height / bg.getBounds().height;
+            stage.addChild(bg);
             break;
         case 2:
-            life = 30;
-            setDinosaursAndBird();
-            setPlayer(6);
-            renderBubble();
+            var bg = new createjs.Sprite(spriteSheet, "bg_sakura");
+            bg.scaleX = stage.canvas.width / bg.getBounds().width;
+            bg.scaleY = stage.canvas.height / bg.getBounds().height;
+            stage.addChild(bg);
             break;
         default:
             break;
     }
+    setDinosaursAndBird();
+    renderBubble();
+    setPlayer(1);
 }
 function addEvent() {
     if (isMobile) {
@@ -646,109 +541,60 @@ function setMap() {
     var rowAm = game.indexBubbleInlocal.length - rowDuong;
     var locationArr = [];
     var maxRow = Math.floor(stage.canvas.height / (game.bubble.currentHeight * 0.87));
-    if (bigSize) {
-        for (let i = 0; i < (game.indexBubbleInlocal.length > maxRow ? game.indexBubbleInlocal.length : maxRow) + 7; i++) {
-            var x = game.bubble.currentWidth,
-                y = rowAm > 0 ? (i - rowAm) * game.bubble.currentHeight * 0.87 : i * game.bubble.currentHeight * 0.87;
-            var arr = [];
-            if ((i > 0 && i % 2 != 0) || i == 0) {
-                for (let j = 0; j < 19; j++) {
-                    var xb = j * x;
-                    xb -= game.bubble.currentWidth / 20;
-                    arr.push({ x: xb, y: y, existing: false, bubble: null, color: null, checked: false, checkAlone: false, vibration: false });
-                }
-            } else {
-                for (let j = 0; j < 18; j++) {
-                    var xb = j * x;
-                    xb += x / 2;
-                    xb -= game.bubble.currentWidth / 20;
-                    arr.push({ x: xb, y: y, existing: false, bubble: null, color: null, checked: false, checkAlone: false, vibration: false });
-                }
+
+    for (let i = 0; i < (game.indexBubbleInlocal.length > maxRow ? game.indexBubbleInlocal.length : maxRow) + 7; i++) {
+        var x = game.bubble.currentWidth,
+            y = rowAm > 0 ? (i - rowAm) * game.bubble.currentHeight * 0.87 : i * game.bubble.currentHeight * 0.87;
+        var arr = [];
+        if ((i > 0 && i % 2 != 0) || i == 0) {
+            for (let j = 0; j < 11; j++) {
+                var xb = j * x;
+                xb -= game.bubble.currentWidth / 20;
+                arr.push({ x: xb, y: y, existing: false, bubble: null, color: null, checked: false, checkAlone: false, vibration: false });
             }
-            locationArr.push(arr);
-        }
-    }
-    else {
-        for (let i = 0; i < (game.indexBubbleInlocal.length > maxRow ? game.indexBubbleInlocal.length : maxRow) + 7; i++) {
-            var x = game.bubble.currentWidth,
-                y = rowAm > 0 ? (i - rowAm) * game.bubble.currentHeight * 0.87 : i * game.bubble.currentHeight * 0.87;
-            var arr = [];
-            if ((i > 0 && i % 2 != 0) || i == 0) {
-                for (let j = 0; j < 11; j++) {
-                    var xb = j * x;
-                    xb -= game.bubble.currentWidth / 20;
-                    arr.push({ x: xb, y: y, existing: false, bubble: null, color: null, checked: false, checkAlone: false, vibration: false });
-                }
-            } else {
-                for (let j = 0; j < 10; j++) {
-                    var xb = j * x;
-                    xb += x / 2;
-                    xb -= game.bubble.currentWidth / 20;
-                    arr.push({ x: xb, y: y, existing: false, bubble: null, color: null, checked: false, checkAlone: false, vibration: false });
-                }
+        } else {
+            for (let j = 0; j < 10; j++) {
+                var xb = j * x;
+                xb += x / 2;
+                xb -= game.bubble.currentWidth / 20;
+                arr.push({ x: xb, y: y, existing: false, bubble: null, color: null, checked: false, checkAlone: false, vibration: false });
             }
-            locationArr.push(arr);
         }
+        locationArr.push(arr);
     }
+
     return locationArr;
 }
 function lToIndex(x, y) {
     var estimateY = Math.floor(y / (Math.round(game.bubble.currentHeight * 0.87 * 100) / 100));
     x += Math.round(((game.bubble.currentWidth / 20) * 100) / 100);
-    if (bigSize) {
-        if (mapDuong[0].length == 19 && mapDuong[1].length == 18) {
-            if (estimateY % 2 != 0) x -= Math.round(((game.bubble.currentWidth / 2) * 100) / 100);
-            if (estimateY > 25) estimateY = 25;
-            var estimateX = Math.floor(x / game.bubble.currentWidth, 0);
-            if (estimateX < 0) estimateX = 0;
-            if (estimateX > 18) estimateX = 18;
-            if (estimateY % 2 != 0 && estimateX > 17) estimateX = 17;
-            return { x: estimateX, y: estimateY };
-        } else if (mapDuong[0].length == 18 && mapDuong[1].length == 19) {
-            if (estimateY % 2 == 0) x -= Math.round(((game.bubble.currentWidth / 2) * 100) / 100);
-            if (estimateY > 25) estimateY = 25;
-            var estimateX = Math.floor(x / game.bubble.currentWidth, 0);
-            if (estimateX < 0) estimateX = 0;
-            if (estimateX > 18) estimateX = 18;
-            if (estimateY % 2 == 0 && estimateX > 17) estimateX = 17;
-            return { x: estimateX, y: estimateY };
-        } else {
-            if (estimateY % 2 == 0 && estimateY > 1) x -= Math.round(((game.bubble.currentWidth / 2) * 100) / 100);
-            if (estimateY > 25) estimateY = 25;
-            var estimateX = Math.floor(x / game.bubble.currentWidth, 0);
-            if (estimateX < 0) estimateX = 0;
-            if (estimateX > 18) estimateX = 18;
-            if (estimateY % 2 == 0 && estimateY > 1 && estimateX > 17) estimateX = 17;
-            return { x: estimateX, y: estimateY };
-        }
+
+    if (mapDuong[0].length == 11 && mapDuong[1].length == 10) {
+        if (estimateY % 2 != 0) x -= Math.round(((game.bubble.currentWidth / 2) * 100) / 100);
+        if (estimateY > 25) estimateY = 25;
+        var estimateX = Math.floor(x / game.bubble.currentWidth, 0);
+        if (estimateX < 0) estimateX = 0;
+        if (estimateX > 10) estimateX = 10;
+        if (estimateY % 2 != 0 && estimateX > 9) estimateX = 9;
+        return { x: estimateX, y: estimateY };
+    } else if (mapDuong[0].length == 10 && mapDuong[1].length == 11) {
+        if (estimateY % 2 == 0) x -= Math.round(((game.bubble.currentWidth / 2) * 100) / 100);
+        if (estimateY > 25) estimateY = 25;
+        var estimateX = Math.floor(x / game.bubble.currentWidth, 0);
+        if (estimateX < 0) estimateX = 0;
+        if (estimateX > 10) estimateX = 10;
+        if (estimateY % 2 == 0 && estimateX > 9) estimateX = 9;
+        return { x: estimateX, y: estimateY };
+    } else {
+        if (estimateY % 2 == 0 && estimateY > 1) x -= Math.round(((game.bubble.currentWidth / 2) * 100) / 100);
+        if (estimateY > 25) estimateY = 25;
+        var estimateX = Math.floor(x / game.bubble.currentWidth, 0);
+        if (estimateX < 0) estimateX = 0;
+        if (estimateX > 10) estimateX = 10;
+        if (estimateY % 2 == 0 && estimateY > 1 && estimateX > 9) estimateX = 9;
+        return { x: estimateX, y: estimateY };
     }
-    else {
-        if (mapDuong[0].length == 11 && mapDuong[1].length == 10) {
-            if (estimateY % 2 != 0) x -= Math.round(((game.bubble.currentWidth / 2) * 100) / 100);
-            if (estimateY > 25) estimateY = 25;
-            var estimateX = Math.floor(x / game.bubble.currentWidth, 0);
-            if (estimateX < 0) estimateX = 0;
-            if (estimateX > 10) estimateX = 10;
-            if (estimateY % 2 != 0 && estimateX > 9) estimateX = 9;
-            return { x: estimateX, y: estimateY };
-        } else if (mapDuong[0].length == 10 && mapDuong[1].length == 11) {
-            if (estimateY % 2 == 0) x -= Math.round(((game.bubble.currentWidth / 2) * 100) / 100);
-            if (estimateY > 25) estimateY = 25;
-            var estimateX = Math.floor(x / game.bubble.currentWidth, 0);
-            if (estimateX < 0) estimateX = 0;
-            if (estimateX > 10) estimateX = 10;
-            if (estimateY % 2 == 0 && estimateX > 9) estimateX = 9;
-            return { x: estimateX, y: estimateY };
-        } else {
-            if (estimateY % 2 == 0 && estimateY > 1) x -= Math.round(((game.bubble.currentWidth / 2) * 100) / 100);
-            if (estimateY > 25) estimateY = 25;
-            var estimateX = Math.floor(x / game.bubble.currentWidth, 0);
-            if (estimateX < 0) estimateX = 0;
-            if (estimateX > 10) estimateX = 10;
-            if (estimateY % 2 == 0 && estimateY > 1 && estimateX > 9) estimateX = 9;
-            return { x: estimateX, y: estimateY };
-        }
-    }
+
 
 }
 function convertIdtoBubble(id) {
@@ -792,7 +638,18 @@ function convertIdtoBubble(id) {
     }
 }
 function setBackground() {
-    var bg = new createjs.Sprite(spriteSheet, "bg1");
+    var ss = new createjs.SpriteSheet({
+        images: [queue.getResult("bubble_full")],
+        framerate: 25,
+        frames: [
+            [283, 1, 184, 322, 0, 0, 0],
+        ],
+
+        animations: {
+            bg_choose: { frames: [0] },
+        }
+    });
+    var bg = new createjs.Sprite(ss, "bg_choose");
     bg.scaleX = stage.canvas.width / bg.getBounds().width;
     bg.scaleY = stage.canvas.height / bg.getBounds().height;
     stage.addChild(bg);
@@ -851,87 +708,49 @@ function setDinosaursAndBird() {
     textLife = new createjs.Text(life, "bold 22px Arial", "#f0e592");
     textLife.scale = (stage.canvas.width / 20) / textLife.getMeasuredWidth();
     textLife.x = (stage.canvas.width - textLife.getMeasuredWidth() * textLife.scale) / 2
-    if (bigSize) {
-        textLife.y = outer1.y - outer1.regX / 3
-        player.y = outer1.y - game.bubble.currentHeight * 2;
-    } else {
-        player.y = outer1.y - game.bubble.currentHeight * 1.3;
-        textLife.y = outer1.y - outer1.regX / 5
-    }
+
+    player.y = outer1.y - game.bubble.currentHeight * 1.3;
+    textLife.y = outer1.y - outer1.regX / 5
 
     stage.addChild(outer1, outer2, textLife);
 }
 function renderBubble() {
     var arr = game.indexBubbleInlocal;
-    if (bigSize) {
-        for (let y = 0; y < arr.length; y++) {
-            for (let x = 0; x < arr[y].length; x++) {
-                var id = arr[y][x];
-                if (id == 100) {
-                    var bars = new createjs.Sprite(spriteSheet, convertIdtoBubble(id));
-                    var a = game.map[y][x];
-                    bars.scaleX = stage.canvas.width / 19 / bars.getBounds().width;
-                    bars.scaleY = game.bubble.currentHeight / bars.getBounds().height;
-                    bars.x = a.x;
-                    bars.y = a.y;
-                    containerMain.addChild(bars);
-                    game.map[y][x] = { x: a.x, y: a.y, existing: true, bubble: bars, color: id, checked: false, checkAlone: false, vibration: false };
-                } else if (id >= 0 && id <= 8) {
-                    var bubble = new createjs.Sprite(spriteSheet, convertIdtoBubble(id));
-                    var a = game.map[y][x];
-                    bubble.scaleX = stage.canvas.width / 19 / bubble.getBounds().width;
-                    bubble.scaleY = stage.canvas.width / 19 / bubble.getBounds().width;
-                    bubble.x = a.x;
-                    bubble.y = a.y;
-                    containerMain.addChild(bubble);
-                    game.map[y][x] = { x: a.x, y: a.y, existing: true, bubble: bubble, color: id, checked: false, checkAlone: false, vibration: false };
-                } else if (id >= 10 && id < 20) {
-                    var bubble = new createjs.Sprite(spriteSheet, convertIdtoBubble(id));
-                    var a = game.map[y][x];
-                    bubble.scaleX = stage.canvas.width / 19 / bubble.getBounds().width;
-                    bubble.scaleY = stage.canvas.width / 19 / bubble.getBounds().width;
-                    bubble.x = a.x;
-                    bubble.y = a.y;
-                    containerMain.addChild(bubble);
-                    game.map[y][x] = { x: a.x, y: a.y, existing: true, bubble: bubble, color: id, checked: false, checkAlone: false, vibration: false };
-                }
-            }
-        }
-    } else {
-        for (let y = 0; y < arr.length; y++) {
-            for (let x = 0; x < arr[y].length; x++) {
-                var id = arr[y][x];
-                if (id == 100) {
-                    var bars = new createjs.Sprite(spriteSheet, convertIdtoBubble(id));
-                    var a = game.map[y][x];
-                    bars.scaleX = stage.canvas.width / 10.4 / bars.getBounds().width;
-                    bars.scaleY = game.bubble.currentHeight / bars.getBounds().height;
-                    bars.x = a.x;
-                    bars.y = a.y;
-                    containerMain.addChild(bars);
-                    game.map[y][x] = { x: a.x, y: a.y, existing: true, bubble: bars, color: id, checked: false, checkAlone: false, vibration: false };
-                } else if (id >= 0 && id <= 8) {
-                    var bubble = new createjs.Sprite(spriteSheet, convertIdtoBubble(id));
-                    var a = game.map[y][x];
-                    bubble.scaleX = stage.canvas.width / 10.4 / bubble.getBounds().width;
-                    bubble.scaleY = stage.canvas.width / 10.4 / bubble.getBounds().width;
-                    bubble.x = a.x;
-                    bubble.y = a.y;
-                    containerMain.addChild(bubble);
-                    game.map[y][x] = { x: a.x, y: a.y, existing: true, bubble: bubble, color: id, checked: false, checkAlone: false, vibration: false };
-                } else if (id >= 10 && id < 20) {
-                    var bubble = new createjs.Sprite(spriteSheet, convertIdtoBubble(id));
-                    var a = game.map[y][x];
-                    bubble.scaleX = stage.canvas.width / 11.7 / bubble.getBounds().width;
-                    bubble.scaleY = stage.canvas.width / 11.7 / bubble.getBounds().width;
-                    bubble.x = a.x;
-                    bubble.y = a.y;
-                    containerMain.addChild(bubble);
-                    game.map[y][x] = { x: a.x, y: a.y, existing: true, bubble: bubble, color: id, checked: false, checkAlone: false, vibration: false };
-                }
+
+    for (let y = 0; y < arr.length; y++) {
+        for (let x = 0; x < arr[y].length; x++) {
+            var id = arr[y][x];
+            if (id == 100) {
+                var bars = new createjs.Sprite(spriteSheet, convertIdtoBubble(id));
+                var a = game.map[y][x];
+                bars.scaleX = stage.canvas.width / 10.4 / bars.getBounds().width;
+                bars.scaleY = game.bubble.currentHeight / bars.getBounds().height;
+                bars.x = a.x;
+                bars.y = a.y;
+                containerMain.addChild(bars);
+                game.map[y][x] = { x: a.x, y: a.y, existing: true, bubble: bars, color: id, checked: false, checkAlone: false, vibration: false };
+            } else if (id >= 0 && id <= 8) {
+                var bubble = new createjs.Sprite(spriteSheet, convertIdtoBubble(id));
+                var a = game.map[y][x];
+                bubble.scaleX = stage.canvas.width / 10.4 / bubble.getBounds().width;
+                bubble.scaleY = stage.canvas.width / 10.4 / bubble.getBounds().width;
+                bubble.x = a.x;
+                bubble.y = a.y;
+                containerMain.addChild(bubble);
+                game.map[y][x] = { x: a.x, y: a.y, existing: true, bubble: bubble, color: id, checked: false, checkAlone: false, vibration: false };
+            } else if (id >= 10 && id < 20) {
+                var bubble = new createjs.Sprite(spriteSheet, convertIdtoBubble(id));
+                var a = game.map[y][x];
+                bubble.scaleX = stage.canvas.width / 11.7 / bubble.getBounds().width;
+                bubble.scaleY = stage.canvas.width / 11.7 / bubble.getBounds().width;
+                bubble.x = a.x;
+                bubble.y = a.y;
+                containerMain.addChild(bubble);
+                game.map[y][x] = { x: a.x, y: a.y, existing: true, bubble: bubble, color: id, checked: false, checkAlone: false, vibration: false };
             }
         }
     }
+
     game.map.forEach((row) => {
         if (row[0].y >= 0) mapDuong.push(row);
         else if (row[0].y < 0) mapAm.push(row);
@@ -1276,362 +1095,183 @@ async function vibration(x, y) {
     }
 }
 function boom(x, y, check) {
-    if (bigSize) {
-        if (mapDuong[0].length == 19 && mapDuong[1].length == 18) {
-            if (y == 0) {
-                if (x == 0) {
-                    check("Right", x, y);
-                    check("Bottom", x, y);
-                } else if (x == 18) {
-                    check("Left", x, y);
-                    check("BottomLeft", x, y);
-                } else {
-                    check("Left", x, y);
-                    check("Right", x, y);
-                    check("Bottom", x, y);
-                    check("BottomLeft", x, y);
-                }
-            } else if (y > 0 && y % 2 == 0) {
-                if (x == 0) {
-                    check("Top", x, y);
-                    check("Right", x, y);
-                    check("Bottom", x, y);
-                } else if (x == 18) {
-                    check("Left", x, y);
-                    check("TopLeft", x, y);
-                    check("BottomLeft", x, y);
-                } else {
-                    check("Left", x, y);
-                    check("TopLeft", x, y);
-                    check("Top", x, y);
-                    check("Right", x, y);
-                    check("Bottom", x, y);
-                    check("BottomLeft", x, y);
-                }
+    if (mapDuong[0].length == 11 && mapDuong[1].length == 10) {
+        if (y == 0) {
+            if (x == 0) {
+                check("Right", x, y);
+                check("Bottom", x, y);
+            } else if (x == 10) {
+                check("Left", x, y);
+                check("BottomLeft", x, y);
             } else {
-                if (x == 0) {
-                    check("Top", x, y);
-                    check("TopRight", x, y);
-                    check("Right", x, y);
-                    check("BottomRight", x, y);
-                    check("Bottom", x, y);
-                } else if (x == 17) {
-                    check("Left", x, y);
-                    check("Top", x, y);
-                    check("TopRight", x, y);
-                    check("BottomRight", x, y);
-                    check("Bottom", x, y);
-                } else {
-                    check("Left", x, y);
-                    check("Top", x, y);
-                    check("TopRight", x, y);
-                    check("Right", x, y);
-                    check("BottomRight", x, y);
-                    check("Bottom", x, y);
-                }
+                check("Left", x, y);
+                check("Right", x, y);
+                check("Bottom", x, y);
+                check("BottomLeft", x, y);
             }
-        } else if (mapDuong[0].length == 18 && mapDuong[1].length == 19) {
-            if (y == 0) {
-                if (x == 0) {
-                    check("Right", x, y);
-                    check("BottomRight", x, y);
-                    check("Bottom", x, y);
-                } else if (x == 17) {
-                    check("Left", x, y);
-                    check("BottomRight", x, y);
-                    check("Bottom", x, y);
-                } else {
-                    check("Left", x, y);
-                    check("Right", x, y);
-                    check("BottomRight", x, y);
-                    check("Bottom", x, y);
-                }
-            } else if (y > 0 && y % 2 == 0) {
-                if (x == 0) {
-                    check("Top", x, y);
-                    check("TopRight", x, y);
-                    check("Right", x, y);
-                    check("BottomRight", x, y);
-                    check("Bottom", x, y);
-                } else if (x == 17) {
-                    check("Left", x, y);
-                    check("Top", x, y);
-                    check("TopRight", x, y);
-                    check("BottomRight", x, y);
-                    check("Bottom", x, y);
-                } else {
-                    check("Left", x, y);
-                    check("Top", x, y);
-                    check("TopRight", x, y);
-                    check("Right", x, y);
-                    check("BottomRight", x, y);
-                    check("Bottom", x, y);
-                }
+        } else if (y > 0 && y % 2 == 0) {
+            if (x == 0) {
+                check("Top", x, y);
+                check("Right", x, y);
+                check("Bottom", x, y);
+            } else if (x == 10) {
+                check("Left", x, y);
+                check("TopLeft", x, y);
+                check("BottomLeft", x, y);
             } else {
-                if (x == 0) {
-                    check("Top", x, y);
-                    check("Right", x, y);
-                    check("Bottom", x, y);
-                } else if (x == 18) {
-                    check("Left", x, y);
-                    check("TopLeft", x, y);
-                    check("BottomLeft", x, y);
-                } else {
-                    check("Left", x, y);
-                    check("TopLeft", x, y);
-                    check("Top", x, y);
-                    check("Right", x, y);
-                    check("Bottom", x, y);
-                    check("BottomLeft", x, y);
-                }
+                check("Left", x, y);
+                check("TopLeft", x, y);
+                check("Top", x, y);
+                check("Right", x, y);
+                check("Bottom", x, y);
+                check("BottomLeft", x, y);
             }
         } else {
-            if (y == 0) {
-                if (x == 0) {
-                    check("Right", x, y);
-                    check("BottomRight", x, y);
-                    check("Bottom", x, y);
-                } else if (x == 18) {
-                    check("Left", x, y);
-                    check("BottomLeft", x, y);
-                    check("Bottom", x, y);
-                } else {
-                    check("Left", x, y);
-                    check("Right", x, y);
-                    check("BottomRight", x, y);
-                    check("Bottom", x, y);
-                    check("BottomLeft", x, y);
-                }
-            } else if (y == 1) {
-                if (x == 0) {
-                    check("Top", x, y);
-                    check("TopRight", x, y);
-                    check("Right", x, y);
-                    check("Bottom", x, y);
-                } else if (x == 18) {
-                    check("Left", x, y);
-                    check("TopLeft", x, y);
-                    check("Top", x, y);
-                    check("BottomLeft", x, y);
-                } else {
-                    check("Left", x, y);
-                    check("TopLeft", x, y);
-                    check("Top", x, y);
-                    check("TopRight", x, y);
-                    check("Right", x, y);
-                    check("Bottom", x, y);
-                    check("BottomLeft", x, y);
-                }
-            } else if (y > 0 && y % 2 == 0) {
+            if (x == 0) {
+                check("Top", x, y);
+                check("TopRight", x, y);
+                check("Right", x, y);
+                check("BottomRight", x, y);
+                check("Bottom", x, y);
+            } else if (x == 9) {
+                check("Left", x, y);
                 check("Top", x, y);
                 check("TopRight", x, y);
                 check("BottomRight", x, y);
                 check("Bottom", x, y);
-                if (x == 0) {
-                    check("Right", x, y);
-                } else if (x == 17) {
-                    check("Left", x, y);
-                } else {
-                    check("Left", x, y);
-                    check("Right", x, y);
-                }
             } else {
-                if (x == 0) {
-                    check("Top", x, y);
-                    check("Right", x, y);
-                    check("Bottom", x, y);
-                } else if (x == 18) {
-                    check("Left", x, y);
-                    check("TopLeft", x, y);
-                    check("BottomLeft", x, y);
-                } else {
-                    check("Left", x, y);
-                    check("TopLeft", x, y);
-                    check("Top", x, y);
-                    check("Right", x, y);
-                    check("Bottom", x, y);
-                    check("BottomLeft", x, y);
-                }
+                check("Left", x, y);
+                check("Top", x, y);
+                check("TopRight", x, y);
+                check("Right", x, y);
+                check("BottomRight", x, y);
+                check("Bottom", x, y);
+            }
+        }
+    } else if (mapDuong[0].length == 10 && mapDuong[1].length == 11) {
+        if (y == 0) {
+            if (x == 0) {
+                check("Right", x, y);
+                check("BottomRight", x, y);
+                check("Bottom", x, y);
+            } else if (x == 9) {
+                check("Left", x, y);
+                check("BottomRight", x, y);
+                check("Bottom", x, y);
+            } else {
+                check("Left", x, y);
+                check("Right", x, y);
+                check("BottomRight", x, y);
+                check("Bottom", x, y);
+            }
+        } else if (y > 0 && y % 2 == 0) {
+            if (x == 0) {
+                check("Top", x, y);
+                check("TopRight", x, y);
+                check("Right", x, y);
+                check("BottomRight", x, y);
+                check("Bottom", x, y);
+            } else if (x == 9) {
+                check("Left", x, y);
+                check("Top", x, y);
+                check("TopRight", x, y);
+                check("BottomRight", x, y);
+                check("Bottom", x, y);
+            } else {
+                check("Left", x, y);
+                check("Top", x, y);
+                check("TopRight", x, y);
+                check("Right", x, y);
+                check("BottomRight", x, y);
+                check("Bottom", x, y);
+            }
+        } else {
+            if (x == 0) {
+                check("Top", x, y);
+                check("Right", x, y);
+                check("Bottom", x, y);
+            } else if (x == 10) {
+                check("Left", x, y);
+                check("TopLeft", x, y);
+                check("BottomLeft", x, y);
+            } else {
+                check("Left", x, y);
+                check("TopLeft", x, y);
+                check("Top", x, y);
+                check("Right", x, y);
+                check("Bottom", x, y);
+                check("BottomLeft", x, y);
             }
         }
     } else {
-        if (mapDuong[0].length == 11 && mapDuong[1].length == 10) {
-            if (y == 0) {
-                if (x == 0) {
-                    check("Right", x, y);
-                    check("Bottom", x, y);
-                } else if (x == 10) {
-                    check("Left", x, y);
-                    check("BottomLeft", x, y);
-                } else {
-                    check("Left", x, y);
-                    check("Right", x, y);
-                    check("Bottom", x, y);
-                    check("BottomLeft", x, y);
-                }
-            } else if (y > 0 && y % 2 == 0) {
-                if (x == 0) {
-                    check("Top", x, y);
-                    check("Right", x, y);
-                    check("Bottom", x, y);
-                } else if (x == 10) {
-                    check("Left", x, y);
-                    check("TopLeft", x, y);
-                    check("BottomLeft", x, y);
-                } else {
-                    check("Left", x, y);
-                    check("TopLeft", x, y);
-                    check("Top", x, y);
-                    check("Right", x, y);
-                    check("Bottom", x, y);
-                    check("BottomLeft", x, y);
-                }
-            } else {
-                if (x == 0) {
-                    check("Top", x, y);
-                    check("TopRight", x, y);
-                    check("Right", x, y);
-                    check("BottomRight", x, y);
-                    check("Bottom", x, y);
-                } else if (x == 9) {
-                    check("Left", x, y);
-                    check("Top", x, y);
-                    check("TopRight", x, y);
-                    check("BottomRight", x, y);
-                    check("Bottom", x, y);
-                } else {
-                    check("Left", x, y);
-                    check("Top", x, y);
-                    check("TopRight", x, y);
-                    check("Right", x, y);
-                    check("BottomRight", x, y);
-                    check("Bottom", x, y);
-                }
-            }
-        } else if (mapDuong[0].length == 10 && mapDuong[1].length == 11) {
-            if (y == 0) {
-                if (x == 0) {
-                    check("Right", x, y);
-                    check("BottomRight", x, y);
-                    check("Bottom", x, y);
-                } else if (x == 9) {
-                    check("Left", x, y);
-                    check("BottomRight", x, y);
-                    check("Bottom", x, y);
-                } else {
-                    check("Left", x, y);
-                    check("Right", x, y);
-                    check("BottomRight", x, y);
-                    check("Bottom", x, y);
-                }
-            } else if (y > 0 && y % 2 == 0) {
-                if (x == 0) {
-                    check("Top", x, y);
-                    check("TopRight", x, y);
-                    check("Right", x, y);
-                    check("BottomRight", x, y);
-                    check("Bottom", x, y);
-                } else if (x == 9) {
-                    check("Left", x, y);
-                    check("Top", x, y);
-                    check("TopRight", x, y);
-                    check("BottomRight", x, y);
-                    check("Bottom", x, y);
-                } else {
-                    check("Left", x, y);
-                    check("Top", x, y);
-                    check("TopRight", x, y);
-                    check("Right", x, y);
-                    check("BottomRight", x, y);
-                    check("Bottom", x, y);
-                }
-            } else {
-                if (x == 0) {
-                    check("Top", x, y);
-                    check("Right", x, y);
-                    check("Bottom", x, y);
-                } else if (x == 10) {
-                    check("Left", x, y);
-                    check("TopLeft", x, y);
-                    check("BottomLeft", x, y);
-                } else {
-                    check("Left", x, y);
-                    check("TopLeft", x, y);
-                    check("Top", x, y);
-                    check("Right", x, y);
-                    check("Bottom", x, y);
-                    check("BottomLeft", x, y);
-                }
-            }
-        } else {
-            if (y == 0) {
-                if (x == 0) {
-                    check("Right", x, y);
-                    check("BottomRight", x, y);
-                    check("Bottom", x, y);
-                } else if (x == 10) {
-                    check("Left", x, y);
-                    check("BottomLeft", x, y);
-                    check("Bottom", x, y);
-                } else {
-                    check("Left", x, y);
-                    check("Right", x, y);
-                    check("BottomRight", x, y);
-                    check("Bottom", x, y);
-                    check("BottomLeft", x, y);
-                }
-            } else if (y == 1) {
-                if (x == 0) {
-                    check("Top", x, y);
-                    check("TopRight", x, y);
-                    check("Right", x, y);
-                    check("Bottom", x, y);
-                } else if (x == 10) {
-                    check("Left", x, y);
-                    check("TopLeft", x, y);
-                    check("Top", x, y);
-                    check("BottomLeft", x, y);
-                } else {
-                    check("Left", x, y);
-                    check("TopLeft", x, y);
-                    check("Top", x, y);
-                    check("TopRight", x, y);
-                    check("Right", x, y);
-                    check("Bottom", x, y);
-                    check("BottomLeft", x, y);
-                }
-            } else if (y > 0 && y % 2 == 0) {
-                check("Top", x, y);
-                check("TopRight", x, y);
+        if (y == 0) {
+            if (x == 0) {
+                check("Right", x, y);
                 check("BottomRight", x, y);
                 check("Bottom", x, y);
-                if (x == 0) {
-                    check("Right", x, y);
-                } else if (x == 9) {
-                    check("Left", x, y);
-                } else {
-                    check("Left", x, y);
-                    check("Right", x, y);
-                }
+            } else if (x == 10) {
+                check("Left", x, y);
+                check("BottomLeft", x, y);
+                check("Bottom", x, y);
             } else {
-                if (x == 0) {
-                    check("Top", x, y);
-                    check("Right", x, y);
-                    check("Bottom", x, y);
-                } else if (x == 10) {
-                    check("Left", x, y);
-                    check("TopLeft", x, y);
-                    check("BottomLeft", x, y);
-                } else {
-                    check("Left", x, y);
-                    check("TopLeft", x, y);
-                    check("Top", x, y);
-                    check("Right", x, y);
-                    check("Bottom", x, y);
-                    check("BottomLeft", x, y);
-                }
+                check("Left", x, y);
+                check("Right", x, y);
+                check("BottomRight", x, y);
+                check("Bottom", x, y);
+                check("BottomLeft", x, y);
+            }
+        } else if (y == 1) {
+            if (x == 0) {
+                check("Top", x, y);
+                check("TopRight", x, y);
+                check("Right", x, y);
+                check("Bottom", x, y);
+            } else if (x == 10) {
+                check("Left", x, y);
+                check("TopLeft", x, y);
+                check("Top", x, y);
+                check("BottomLeft", x, y);
+            } else {
+                check("Left", x, y);
+                check("TopLeft", x, y);
+                check("Top", x, y);
+                check("TopRight", x, y);
+                check("Right", x, y);
+                check("Bottom", x, y);
+                check("BottomLeft", x, y);
+            }
+        } else if (y > 0 && y % 2 == 0) {
+            check("Top", x, y);
+            check("TopRight", x, y);
+            check("BottomRight", x, y);
+            check("Bottom", x, y);
+            if (x == 0) {
+                check("Right", x, y);
+            } else if (x == 9) {
+                check("Left", x, y);
+            } else {
+                check("Left", x, y);
+                check("Right", x, y);
+            }
+        } else {
+            if (x == 0) {
+                check("Top", x, y);
+                check("Right", x, y);
+                check("Bottom", x, y);
+            } else if (x == 10) {
+                check("Left", x, y);
+                check("TopLeft", x, y);
+                check("BottomLeft", x, y);
+            } else {
+                check("Left", x, y);
+                check("TopLeft", x, y);
+                check("Top", x, y);
+                check("Right", x, y);
+                check("Bottom", x, y);
+                check("BottomLeft", x, y);
             }
         }
+
     }
 }
 function setMove(x1, y1, x2, y2, anpha) {
@@ -1763,7 +1403,8 @@ async function removeIce(x, y) {
     if (iceBuble.length) {
         for (let i = 0; i < iceBuble.length; i++) {
             const item = iceBuble[i];
-            bubbleDie(item.color, item.x, item.y);}
+            bubbleDie(item.color, item.x, item.y);
+        }
         iceBuble = []
         return true
     } else return false
@@ -1771,9 +1412,7 @@ async function removeIce(x, y) {
 function bubbleDie(color, x, y) {
     if (color <= 8) {
         var bubble = new createjs.Sprite(spriteSheet, convertAnimations(color));
-
-        if (bigSize) bubble.scale = color == 7 ? (stage.canvas.width / 40) / bubble.getBounds().width : (stage.canvas.width / 19) / bubble.getBounds().width;
-        else bubble.scale = color == 7 ? (stage.canvas.width / 25) / bubble.getBounds().width : (stage.canvas.width / 10.4) / bubble.getBounds().width;
+        bubble.scale = color == 7 ? (stage.canvas.width / 25) / bubble.getBounds().width : (stage.canvas.width / 10.4) / bubble.getBounds().width;
         bubble.x = x;
         bubble.y = y;
         stage.addChild(bubble);
@@ -2270,13 +1909,8 @@ function onPressMove(evt) {
 function updateTextLife() {
     life--;
     textLife.text = life;
-    if (bigSize) {
-        textLife.y = outer1.y - outer1.regX / 2
-        textLife.x = (stage.canvas.width - textLife.getMeasuredWidth() * textLife.scale) / 2
-    } else {
-        textLife.y = outer1.y - outer1.regX / 4
-        textLife.x = (stage.canvas.width - textLife.getMeasuredWidth() * textLife.scale) / 2
-    }
+    textLife.y = outer1.y - outer1.regX / 4
+    textLife.x = (stage.canvas.width - textLife.getMeasuredWidth() * textLife.scale) / 2
 }
 function onMouseUp(evt) {
     pressMove = false;
