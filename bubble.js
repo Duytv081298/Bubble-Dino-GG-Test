@@ -281,7 +281,7 @@ function addEvent() {
     }
     // window.addEventListener('orientationchange', changeOrientation, supportsPassive ? { passive: true } : false);
     window.addEventListener("orientationchange", function() {
-        alert(window.orientation);
+        console.log(window.orientation);
       }, false);
 }
 function removeEvent() {
@@ -303,6 +303,7 @@ function setStage() {
     if (isMobile == true && defaultOrientation == 'landscape') {
         width = height / 1.7;
     }
+    console.log('1111111');
     stage.canvas.width = width;
     console.log({ width: width, height: height });
     console.log({ width: stage.canvas.width, height: stage.canvas.height });
