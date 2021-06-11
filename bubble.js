@@ -207,6 +207,7 @@ function getScreen() {
     return { width: width, height: height }
 }
 function changeOrientation() {
+    console.log('ssssssssssssss');
     screenSize = { width: document.documentElement.clientWidth, height: document.documentElement.clientHeight }
     var screen = getScreen()
     console.log(screen);
