@@ -65,6 +65,7 @@ const mapIndexR =
     ];
 async function gameinit() {
     defaultOrientation = getOrientation();
+    console.log(defaultOrientation);
     createjs.RotationPlugin.install();
     createjs.MotionGuidePlugin.install();
     setStage();
