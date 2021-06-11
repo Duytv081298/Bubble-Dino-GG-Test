@@ -279,7 +279,10 @@ function addEvent() {
         canvas.addEventListener("mousemove", onPressMove);
         canvas.addEventListener("mouseup", onMouseUp);
     }
-    window.addEventListener('orientationchange', changeOrientation, supportsPassive ? { passive: true } : false);
+    // window.addEventListener('orientationchange', changeOrientation, supportsPassive ? { passive: true } : false);
+    window.addEventListener("orientationchange", function() {
+        alert(window.orientation);
+      }, false);
 }
 function removeEvent() {
     if (isMobile) {
